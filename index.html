@@ -41,11 +41,11 @@
             .append("div")
             .style("opacity", 0)
             .attr("class", "tooltip")
-            .style("background-color", "white")
-            .style("border", "solid")
-            .style("border-width", "1px")
-            .style("border-radius", "5px")
-            .style("padding", "5px")
+            // .style("background-color", "white")
+            // .style("border", "solid")
+            // .style("border-width", "1px")
+            // .style("border-radius", "5px")
+            // .style("padding", "5px")
 
         // Load external data and boot
         Promise.all([
@@ -78,8 +78,8 @@
                     if (EU_members.includes(d.srcElement.__data__.properties.ID)) {
                         tooltip
                             .html(d.srcElement.__data__.properties.NAME + ": " + d.srcElement.__data__.total)
-                            .style("left", (d.screenX + 40) + "px")
-                            .style("top", (d.screenY) + "px")
+                            .style("left", (d.clientX + 20) + "px")
+                            .style("top", (d.clientY) + "px")
                     }
                 }
 
