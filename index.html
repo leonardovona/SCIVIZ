@@ -12,112 +12,116 @@
 
     <!-- Create an element where the map will take place -->
     <div id="map">
-        <svg id="my_dataviz" width="600" height="550"></svg>
     </div>
+    <button onclick="update('2019')">click</button>
 
     <script>
         const EU_members = ["AT", "BE", "BG", "CY", "CZ", "DE", "DK", "EE", "EL", "ES",
             "FI", "FR", "HR", "HU", "IE", "IT", "LT", "LU", "LV", "MT", "NL", "PL", "PT", "RO", "SE", "SI", "SK"]
         // The svg
-        var svg = d3.select("svg"),
-            width = +svg.attr("width"),
-            height = +svg.attr("height");
+        const width = 600, height = 550
+        var svg = d3.select("#map")
+            .append("svg")
+            .attr("width", width)
+            .attr("height", height)
 
-        // Map and projection
-        var path = d3.geoPath();
-        var projection = d3.geoMercator()
-            .scale(420)
-            .center([13, 55])
-            .translate([width / 2, height / 2]);
+        // Create a function that takes a dataset as input and update the plot:
+        function update(year) {
 
-        // Data and color scale
-        const data = new Map();
+            // Map and projection
+            var path = d3.geoPath();
+            var projection = d3.geoMercator()
+                .scale(420)
+                .center([13, 55])
+                .translate([width / 2, height / 2]);
 
-        var colorScale = d3.scaleThreshold()
-            .domain([0.01, 1, 2, 4, 8, 16, 32])
-            .range(d3.schemeBlues[7]);
+            // Data and color scale
+            const data = new Map();
 
-        var tooltip = d3.select("#map")
-            .append("div")
-            .style("opacity", 0)
-            .attr("class", "tooltip")
-            // .style("background-color", "white")
-            // .style("border", "solid")
-            // .style("border-width", "1px")
-            // .style("border-radius", "5px")
-            // .style("padding", "5px")
+            var colorScale = d3.scaleThreshold()
+                .domain([0.01, 1, 2, 4, 8, 16, 32])
+                .range(d3.schemeBlues[7]);
 
-        // Load external data and boot
-        Promise.all([
-            d3.json("./resources/europe.geojson"),
-            d3.csv("./resources/2000_wei.csv", function (d) {
-                data.set(d.ID, +d.OBS_VALUE)
-            })]).then(function (loadData) {
-                let topo = loadData[0]
+            var tooltip = d3.select("#map")
+                .append("div")
+                .style("opacity", 0)
+                .attr("class", "tooltip")
 
-                let mouseOver = function (d) {
-                    if (EU_members.includes(d.srcElement.__data__.properties.ID)) {
-                        d3.selectAll(".Country")
-                            .transition()
-                            .duration(200)
-                            .style("opacity", .5)
-                            .style("stroke", "transparent")
-                        d3.select(this)
-                            .transition()
-                            .duration(200)
-                            .style("opacity", 1)
-                            .style("stroke", "black")
-                        tooltip
-                            .transition()
-                            .duration(300)
-                            .style("opacity", 1)
+            // Load external data and boot
+            Promise.all([
+                d3.json("./resources/europe.geojson"),
+                d3.csv("./resources/" + year + "_wei.csv", function (d) {
+                    data.set(d.ID, +d.OBS_VALUE)
+                })]).then(function (loadData) {
+                    let topo = loadData[0]
+
+                    let mouseOver = function (d) {
+                        if (EU_members.includes(d.srcElement.__data__.properties.ID)) {
+                            d3.selectAll(".Country")
+                                .transition()
+                                .duration(200)
+                                .style("opacity", .5)
+                                .style("stroke", "transparent")
+                            d3.select(this)
+                                .transition()
+                                .duration(200)
+                                .style("opacity", 1)
+                                .style("stroke", "black")
+                            tooltip
+                                .transition()
+                                .duration(300)
+                                .style("opacity", 1)
+                        }
                     }
-                }
 
-                let mouseMove = function (d) {
-                    if (EU_members.includes(d.srcElement.__data__.properties.ID)) {
-                        tooltip
-                            .html(d.srcElement.__data__.properties.NAME + ": " + d.srcElement.__data__.total)
-                            .style("left", (d.clientX + 20) + "px")
-                            .style("top", (d.clientY) + "px")
+                    let mouseMove = function (d) {
+                        if (EU_members.includes(d.srcElement.__data__.properties.ID)) {
+                            tooltip
+                                .html(d.srcElement.__data__.properties.NAME + ": " + d.srcElement.__data__.total)
+                                .style("left", (d.clientX + 20) + "px")
+                                .style("top", (d.clientY) + "px")
+                        }
                     }
-                }
 
-                let mouseLeave = function (d) {
-                    if (EU_members.includes(d.srcElement.__data__.properties.ID)) {
-                        d3.selectAll(".Country")
-                            .transition()
-                            .duration(200)
-                            .style("opacity", 1)
-                            .style("stroke", "transparent")
-                        tooltip.transition().duration(300)
-                            .style("opacity", 0)
+                    let mouseLeave = function (d) {
+                        if (EU_members.includes(d.srcElement.__data__.properties.ID)) {
+                            d3.selectAll(".Country")
+                                .transition()
+                                .duration(200)
+                                .style("opacity", 1)
+                                .style("stroke", "transparent")
+                            tooltip.transition().duration(300)
+                                .style("opacity", 0)
+                        }
                     }
-                }
+                    
+                    // Draw the map
+                    svg.append("g")
+                        .selectAll("path")
+                        .data(topo.features)
+                        .enter()
+                        .append("path")
+                        // draw each country
+                        .attr("d", d3.geoPath()
+                            .projection(projection)
+                        )
+                        // set the color of each country
+                        .attr("fill", function (d) {
+                            d.total = data.get(d.properties.ID) || 0;
+                            return colorScale(d.total);
+                        })
+                        .style("stroke", "transparent")
+                        .attr("class", function (d) { return "Country" })
+                        .style("opacity", .8)
+                        .on("mouseover", mouseOver)
+                        .on("mousemove", mouseMove)
+                        .on("mouseleave", mouseLeave)
 
-                // Draw the map
-                svg.append("g")
-                    .selectAll("path")
-                    .data(topo.features)
-                    .enter()
-                    .append("path")
-                    // draw each country
-                    .attr("d", d3.geoPath()
-                        .projection(projection)
-                    )
-                    // set the color of each country
-                    .attr("fill", function (d) {
-                        d.total = data.get(d.properties.ID) || 0;
-                        return colorScale(d.total);
-                    })
-                    .style("stroke", "transparent")
-                    .attr("class", function (d) { return "Country" })
-                    .style("opacity", .8)
-                    .on("mouseover", mouseOver)
-                    .on("mousemove", mouseMove)
-                    .on("mouseleave", mouseLeave)
+                })
+        }
 
-            })
+        // At the beginning, I run the update function on the first dataset:
+        update("2000")
 
     </script>
 
