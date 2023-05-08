@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<head>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- Load d3.js -->
+    <script src="https://d3js.org/d3.v4.js"></script>
+    <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+    <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
+
+    <!-- Create an element where the map will take place -->
+    <div id="map">
+        <svg id="my_dataviz" width="600" height="550"></svg>
+    </div>
+
+    <script>
+        const EU_members = ["AT", "BE", "BG", "CY", "CZ", "DE", "DK", "EE", "EL", "ES",
+            "FI", "FR", "HR", "HU", "IE", "IT", "LT", "LU", "LV", "MT", "NL", "PL", "PT", "RO", "SE", "SI", "SK"]
+        // The svg
+        var svg = d3.select("svg"),
+            width = +svg.attr("width"),
+            height = +svg.attr("height");
+
+        // Map and projection
+        var path = d3.geoPath();
+        var projection = d3.geoMercator()
+            .scale(420)
+            .center([13, 55])
+            .translate([width / 2, height / 2]);
+
+        // Data and color scale
+        var data = d3.map();
+        var colorScale = d3.scaleThreshold()
+            .domain([0.01, 1, 2, 4, 8, 16, 32])
+            .range(d3.schemeBlues[7]);
+
+        // Load external data and boot
+        d3.queue()
+            .defer(d3.json, "./resources/europe.geojson")
+            .defer(d3.csv, "./resources/2000_wei.csv", function (d) { data.set(d.ID, +d.OBS_VALUE); })
+            .await(ready);
+
+        var tooltip = d3.select("#map")
+            .append("div")
+            .style("opacity", 0)
+            .attr("class", "tooltip")
+            .style("background-color", "white")
+            .style("border", "solid")
+            .style("border-width", "1px")
+            .style("border-radius", "5px")
+            .style("padding", "5px")
+
+        function ready(error, topo) {
+
+            let mouseOver = function (d) {
+                if (EU_members.includes(d.properties.ID)) {
+                    d3.selectAll(".Country")
+                        .transition()
+                        .duration(200)
+                        .style("opacity", .5)
+                        .style("stroke", "transparent")
+                    d3.select(this)
+                        .transition()
+                        .duration(200)
+                        .style("opacity", 1)
+                        .style("stroke", "black")
+                    tooltip
+                        .transition()
+                        .duration(300)
+                        .style("opacity", 1)
+                }
+            }
+
+            let mouseMove = function (d) {
+                if (EU_members.includes(d.properties.ID)) {
+                    tooltip
+                        .html(d.properties.NAME + ": " + d.total)
+                        .style("left", (d3.mouse(this)[0] + 40) + "px")
+                        .style("top", (d3.mouse(this)[1]) + "px")
+                }
+            }
+
+            let mouseLeave = function (d) {
+                if (EU_members.includes(d.properties.ID)) {
+                    d3.selectAll(".Country")
+                        .transition()
+                        .duration(200)
+                        .style("opacity", 1)
+                        .style("stroke", "transparent")
+                    tooltip.transition().duration(300)
+                        .style("opacity", 0)
+                }
+            }
+            // Draw the map
+            svg.append("g")
+                .selectAll("path")
+                .data(topo.features)
+                .enter()
+                .append("path")
+                // draw each country
+                .attr("d", d3.geoPath()
+                    .projection(projection)
+                )
+                // set the color of each country
+                .attr("fill", function (d) {
+                    d.total = data.get(d.properties.ID) || 0;
+                    return colorScale(d.total);
+                })
+                .style("stroke", "transparent")
+                .attr("class", function (d) { return "Country"; })
+                .style("opacity", 1)
+                .on("mouseover", mouseOver)
+                .on("mousemove", mouseMove)
+                .on("mouseleave", mouseLeave);
+        }
+
+    </script>
+
+</body>
