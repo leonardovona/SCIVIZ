@@ -1,3 +1,7 @@
+input[type="range"] {
+    width:600px;
+  }
+
 div.tooltip {   
     position: absolute;
     padding: 7px;

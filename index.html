@@ -13,17 +13,53 @@
     <!-- Create an element where the map will take place -->
     <div id="map">
     </div>
-    <button onclick="handle_update('2000')">click</button>
+    <div class="range">
+        <input type="range" min="2000" max="2019" steps="1" value="2019" id="year_input" list="steplist">
+        <datalist id="steplist">
+            <option value="2000"></option>
+            <option value="2001"></option>
+            <option value="2002"></option>
+            <option value="2003"></option>
+            <option value="2004"></option>
+            <option value="2005"></option>
+            <option value="2006"></option>
+            <option value="2007"></option>
+            <option value="2008"></option>
+            <option value="2009"></option>
+            <option value="2010"></option>
+            <option value="2011"></option>
+            <option value="2012"></option>
+            <option value="2013"></option>
+            <option value="2014"></option>
+            <option value="2015"></option>
+            <option value="2016"></option>
+            <option value="2017"></option>
+            <option value="2018"></option>
+            <option value="2019"></option>
+        </datalist>
+        <p>Year: <output id="year"></output></p>
+    </div>
+    <div id="stackedBarChart"></div>
+    <button onclick="update_sb(TOC)">TOC</button>
 
     <script>
         const EU_members = ["AT", "BE", "BG", "CY", "CZ", "DE", "DK", "EE", "EL", "ES",
             "FI", "FR", "HR", "HU", "IE", "IT", "LT", "LU", "LV", "MT", "NL", "PL", "PT", "RO", "SE", "SI", "SK"]
         // The svg
-        const width = 600, height = 550
+
+        const value = document.querySelector("#year")
+        const input = document.querySelector("#year_input")
+        value.textContent = input.value
+        input.addEventListener("input", (event) => {
+            value.textContent = event.target.value
+            handle_update(event.target.value)
+        })
+
+        const width_map = 600, height_map = 550
         var svg = d3.select("#map")
             .append("svg")
-            .attr("width", width)
-            .attr("height", height)
+            .attr("width", width_map)
+            .attr("height", height_map)
 
         var colorScale = d3.scaleThreshold()
             .domain([0.01, 1, 2, 4, 8, 16, 32])
@@ -37,7 +73,7 @@
         var projection = d3.geoMercator()
             .scale(420)
             .center([13, 55])
-            .translate([width / 2, height / 2]);
+            .translate([width_map / 2, height_map / 2]);
 
         // Data and color scale
 
@@ -134,11 +170,174 @@
                     }
                     return colorScale(d.total);
                 })
-
-
         }
 
-        // At the beginning, I run the update function on the first dataset:
+
+        //Stacked bar chart
+
+        // set the dimensions and margins of the graph
+        const margin_bc = { top: 10, right: 30, bottom: 20, left: 70 },
+            width_bc = 600 - margin_bc.left - margin_bc.right,
+            height_bc = 400 - margin_bc.top - margin_bc.bottom;
+
+        // append the svg object to the body of the page
+        const svg_bc = d3.select("#stackedBarChart")
+            .append("svg")
+            .attr("width", width_bc + margin_bc.left + margin_bc.right)
+            .attr("height", height_bc + margin_bc.top + margin_bc.bottom)
+            .append("g")
+            .attr("transform", `translate(${margin_bc.left},${margin_bc.top})`);
+
+
+        pollutants_data = []
+        // Parse the Data
+        d3.csv("./resources/2007_water_pollutants.csv").then(function (data) {
+            pollutants_data = data
+
+            pollutants_data.sort(function (b, a) {
+                a_nitrogen = parseFloat(a.Nitrogen) || 0;
+                a_phosphorus = parseFloat(a.Phosphorus) || 0;
+                a_toc = parseFloat(a.TOC) || 0;
+                a_heavymetals = parseFloat(a['Heavy metals (Cd, Hg, Ni, Pb)']) || 0;
+
+                b_nitrogen = parseFloat(b.Nitrogen) || 0;
+                b_phosphorus = parseFloat(b.Phosphorus) || 0;
+                b_toc = parseFloat(b.TOC) || 0;
+                b_heavymetals = parseFloat(b['Heavy metals (Cd, Hg, Ni, Pb)']) || 0;
+
+                tot_a = a_nitrogen + a_phosphorus + a_toc + a_heavymetals;
+                tot_b = b_nitrogen + b_phosphorus + b_toc + b_heavymetals;
+
+                return tot_a - tot_b;
+            });
+
+            // List of subgroups = header of the csv files = soil condition here
+            const subgroups = pollutants_data.columns.slice(1)
+
+            // List of groups = species here = value of the first column called group -> I show them on the X axis
+            const groups = pollutants_data.map(d => (d.countryName))
+
+            // Add X axis
+            const x = d3.scaleBand()
+                .domain(groups)
+                .range([0, width_bc])
+                .padding([0.2])
+
+            svg_bc.append("g")
+                .attr("transform", `translate(0, ${height_bc})`)
+                .call(d3.axisBottom(x).tickSizeOuter(0));
+
+            // Add Y axis
+            const y = d3.scaleLinear()
+                .domain([0, 170000000])
+                .range([height_bc, 0]);
+            svg_bc.append("g")
+                .call(d3.axisLeft(y));
+
+            // color palette = one color per subgroup
+            const color = d3.scaleOrdinal()
+                .domain(subgroups)
+                .range(['#e41a1c', '#377eb8', '#4daf4a', '#834aaf'])
+
+            //stack the data? --> stack per subgroup
+            const stackedData = d3.stack()
+                .keys(subgroups)
+                // .order(d3.stackOrderDescending)
+                (pollutants_data)
+
+            // console.log(stackedData)
+            // Show the bars
+            svg_bc.append("g")
+                .selectAll("g")
+                // Enter in the stack data = loop key per key = group per group
+                .data(stackedData)
+                .join("g")
+                .attr("fill", d => color(d.key))
+                .selectAll("rect")
+                // enter a second time = loop subgroup per subgroup to add all rectangles
+                .data(d => d)
+                .join("rect")
+                .attr("x", d => x(d.data.countryName))
+                .attr("y", d => y(d[1]))
+                .attr("height", d => y(d[0]) - y(d[1]))
+                .attr("width", x.bandwidth())
+        })
+
+        function update_sb(pollutant="all") {
+            pollutants_data.sort(function (b, a) {
+                if(pollutant == "all") {
+                    a_nitrogen = parseFloat(a.Nitrogen) || 0;
+                    a_phosphorus = parseFloat(a.Phosphorus) || 0;
+                    a_toc = parseFloat(a.TOC) || 0;
+                    a_heavymetals = parseFloat(a['Heavy metals (Cd, Hg, Ni, Pb)']) || 0;
+
+                    b_nitrogen = parseFloat(b.Nitrogen) || 0;
+                    b_phosphorus = parseFloat(b.Phosphorus) || 0;
+                    b_toc = parseFloat(b.TOC) || 0;
+                    b_heavymetals = parseFloat(b['Heavy metals (Cd, Hg, Ni, Pb)']) || 0;
+
+                    tot_a = a_nitrogen + a_phosphorus + a_toc + a_heavymetals;
+                    tot_b = b_nitrogen + b_phosphorus + b_toc + b_heavymetals;
+
+                    return tot_a - tot_b;
+                }
+            
+                a_pollutant = parseFloat(a[pollutant]) || 0;
+                b_pollutant = parseFloat(b[pollutant]) || 0;
+
+                return a_pollutant - b_pollutant;
+            });
+
+            // List of groups = species here = value of the first column called group -> I show them on the X axis
+            const groups = pollutants_data.map(d => (d.countryName))
+
+            // Add X axis
+            const x = d3.scaleBand()
+                .domain(groups)
+                .range([0, width_bc])
+                .padding([0.2])
+
+            svg_bc.append("g")
+                .attr("transform", `translate(0, ${height_bc})`)
+                .call(d3.axisBottom(x).tickSizeOuter(0));
+
+            // Add Y axis
+            const y = d3.scaleLinear()
+                .domain([0, 170000000])
+                .range([height_bc, 0]);
+            svg_bc.append("g")
+                .call(d3.axisLeft(y));
+
+            // color palette = one color per subgroup
+            const color = d3.scaleOrdinal()
+                .domain(subgroups)
+                .range(['#e41a1c', '#377eb8', '#4daf4a', '#834aaf'])
+
+            //stack the data? --> stack per subgroup
+            const stackedData = d3.stack()
+                .keys(subgroups)
+                // .order(d3.stackOrderDescending)
+                (pollutants_data)
+
+            // console.log(stackedData)
+            // Show the bars
+            svg_bc.append("g")
+                .selectAll("g")
+                // Enter in the stack data = loop key per key = group per group
+                .data(stackedData)
+                .join("g")
+                .attr("fill", d => color(d.key))
+                .selectAll("rect")
+                // enter a second time = loop subgroup per subgroup to add all rectangles
+                .data(d => d)
+                .join("rect")
+                .attr("x", d => x(d.data.countryName))
+                .attr("y", d => y(d[1]))
+                .attr("height", d => y(d[0]) - y(d[1]))
+                .attr("width", x.bandwidth())
+        }
+
+
     </script>
 
 </body>
