@@ -11,6 +11,8 @@ const svg_sb = d3
     .classed("svg-container", true)
     .append("svg")
     .attr("class", "chart")
+    .attr("height", "50%")
+    .attr("width", "50%")
     .attr(
         "viewBox",
         `0 0 ${width_sb + margin_sb.left + margin_sb.right} ${height_sb + margin_sb.top + margin_sb.bottom}`
@@ -83,7 +85,28 @@ function update_sb(pollutant = "all") {
     //stack the data? --> stack per subgroup
     const stackedData = d3.stack()
         .keys(subgroups)
-        .order(d3.stackOrderDescending)
+        // .order(d3.stackOrderDescending)
+        .order(series => {
+            if(pollutant == "all") {
+                return d3.stackOrderDescending(series);
+            } else {
+                let n = series.length;
+                const o = new Array(n);
+                let i = 0;
+                while(i < n && series[i].key != pollutant){
+                    i++;
+                }
+                o[0] = i;
+                let j = 0, k = 1;
+                while(j < n){
+                    if(j != i) {
+                        o[k++] = j;
+                    }
+                    j++;
+                }
+                return o;
+            }
+        })
         (pollutants_data)
 
 

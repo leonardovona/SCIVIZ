@@ -11,39 +11,47 @@
     <script src="https://d3js.org/d3.v6.js"></script>
 
     <!-- Create an element where the map will take place -->
-    <div id="map">
+    <div class="container">
+        <div id="map">
+        </div>
+        <div class="range">
+            <input type="range" min="2000" max="2019" steps="1" value="2019" id="year_input" list="steplist">
+            <datalist id="steplist">
+                <option value="2000"></option>
+                <option value="2001"></option>
+                <option value="2002"></option>
+                <option value="2003"></option>
+                <option value="2004"></option>
+                <option value="2005"></option>
+                <option value="2006"></option>
+                <option value="2007"></option>
+                <option value="2008"></option>
+                <option value="2009"></option>
+                <option value="2010"></option>
+                <option value="2011"></option>
+                <option value="2012"></option>
+                <option value="2013"></option>
+                <option value="2014"></option>
+                <option value="2015"></option>
+                <option value="2016"></option>
+                <option value="2017"></option>
+                <option value="2018"></option>
+                <option value="2019"></option>
+            </datalist>
+            <p>Year: <output id="year"></output></p>
+        </div>
     </div>
-    <div class="range">
-        <input type="range" min="2000" max="2019" steps="1" value="2019" id="year_input" list="steplist">
-        <datalist id="steplist">
-            <option value="2000"></option>
-            <option value="2001"></option>
-            <option value="2002"></option>
-            <option value="2003"></option>
-            <option value="2004"></option>
-            <option value="2005"></option>
-            <option value="2006"></option>
-            <option value="2007"></option>
-            <option value="2008"></option>
-            <option value="2009"></option>
-            <option value="2010"></option>
-            <option value="2011"></option>
-            <option value="2012"></option>
-            <option value="2013"></option>
-            <option value="2014"></option>
-            <option value="2015"></option>
-            <option value="2016"></option>
-            <option value="2017"></option>
-            <option value="2018"></option>
-            <option value="2019"></option>
-        </datalist>
-        <p>Year: <output id="year"></output></p>
+    <!-- <div class="container"></div> -->
+    <div class="container">
+        <div id="stackedBarChart"></div>
+        <button onclick="update_sb()">Total</button>
+        <button onclick="update_sb('TOC')">TOC</button>
+        <button onclick="update_sb('Nitrogen')">Nitrogen</button>
+        <button onclick="update_sb('Phosphorus')">Phosphorus</button>
+        <button onclick="update_sb('Heavy metals (Cd, Hg, Ni, Pb)')">Heavy metals</button>
     </div>
-    <div id="stackedBarChart"></div>
-    <button onclick="update_sb('TOC')">TOC</button>
-    <button onclick="update_sb('Nitrogen')">Nitrogen</button>
-    <button onclick="update_sb('Phosphorus')">Phosphorus</button>
-    <button onclick="update_sb('Heavy metals (Cd, Hg, Ni, Pb)')">Heavy metals</button>
+
+    <div class="container"></div>
 
     <script>
         const EU_members = ["AT", "BE", "BG", "CY", "CZ", "DE", "DK", "EE", "EL", "ES",

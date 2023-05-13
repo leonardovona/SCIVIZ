@@ -11,6 +11,8 @@ const width_map = 600, height_map = 550
 var svg_map = d3.select("#map")
     .classed("svg-container", true)
     .append("svg")
+    .attr("width", "50%")
+    .attr("height", "50%")
     .attr(
         "viewBox",
         `0 0 ${width_map} ${height_map}`
