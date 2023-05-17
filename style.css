@@ -1,8 +1,52 @@
-html,
+/* html,
 body {
   height: 100%;
   padding: 0;
   margin: 0;
+} */
+
+/* .grid-container {
+  display: grid;
+} */
+
+html, body {
+    margin: 0; 
+    height: 100vh; 
+    overflow: hidden
+}
+
+.container {
+    display: flex;
+    position: relative;
+    /* top: 10px;
+    margin: 0 -5px; */
+}
+
+.item {
+    flex-grow: 1;
+    margin: 0 5px;
+    border-radius: 5px;
+    
+}
+
+#map {
+    width: 100vh;
+    height: 50vh;
+}
+
+#groupedBarChart {
+    width: 100vh;
+    height: 50vh;
+}
+
+#stackedBarChart {
+    width: 100vh;
+    height: 50vh;
+}
+
+#lineChart {
+    width: 100vh;
+    height: 50vh;
 }
 
 /* .container {
@@ -12,7 +56,7 @@ body {
 } */
 
 input[type="range"] {
-    width:600px;
+    width:100vh;
   }
 
 div.tooltip {   

@@ -1,24 +1,23 @@
 //Stacked bar chart
 
 // set the dimensions and margins of the graph
-const margin_sb = { top: 10, right: 30, bottom: 20, left: 70 },
-    width_sb = 600 - margin_sb.left - margin_sb.right,
-    height_sb = 400 - margin_sb.top - margin_sb.bottom;
+const margin_sb = { top: 10, right: 30, bottom: 40, left: 70 },
+    height_sb = 500 - margin_sb.top - margin_sb.bottom;
+
+const stackedBarChartContainer = d3.select("#stackedBarChart")
+const width_sb = stackedBarChartContainer.node().getBoundingClientRect().width - margin_sb.left - margin_sb.right
 
 // append the svg object to the body of the page
-const svg_sb = d3
-    .select("#stackedBarChart")
+const svg_sb = stackedBarChartContainer
     .classed("svg-container", true)
     .append("svg")
-    .attr("class", "chart")
-    .attr("height", "50%")
-    .attr("width", "50%")
     .attr(
         "viewBox",
-        `0 0 ${width_sb + margin_sb.left + margin_sb.right} ${height_sb + margin_sb.top + margin_sb.bottom}`
+        `-${margin_sb.left} -${margin_sb.top} ${width_sb + margin_sb.left + margin_sb.right} ${height_sb + margin_sb.top + margin_sb.bottom}`
     )
     .attr("preserveAspectRatio", "xMinYMin meet")
-    .classed("svg-content-responsive", true)
+    // .classed("svg-content-responsive", true)
+    .attr("height", "100%")
     .append("g")
 
 // Add X axis
@@ -53,7 +52,7 @@ d3.csv("./resources/water_pollutants.csv").then(function (data) {
     update_sb()
 })
 
-function update_sb({pollutant = "Total", year = "2019"} = {}) {
+function update_sb({ pollutant = "Total", year = "2019" } = {}) {
     var data_year = pollutants_data.filter(function (d) {
         if (d.reportingYear == year && d.countryName != "EU") {
             return d;

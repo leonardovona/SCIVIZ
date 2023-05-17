@@ -1,16 +1,18 @@
-const width_map = 600, height_map = 550
+const mapContainer = d3.select("#map")
+const width_map = mapContainer.node().getBoundingClientRect().width
+// const width_map = 600
+const height_map = 550
 
 var svg_map = d3.select("#map")
-    .classed("svg-container", true)
     .append("svg")
-    .attr("width", "50%")
-    .attr("height", "50%")
     .attr(
         "viewBox",
         `0 0 ${width_map} ${height_map}`
     )
+    .attr("height", "100%")
+    // .attr("preserveAspectRatio", "none")
     .attr("preserveAspectRatio", "xMinYMin meet")
-    .classed("svg-content-responsive", true)
+    // .classed("svg-content-responsive", true)
 
 var colorScale = d3.scaleThreshold()
     .domain([0.01, 1, 2, 4, 8, 16, 32])

@@ -10,50 +10,46 @@
     <!-- Load d3.js -->
     <script src="https://d3js.org/d3.v6.js"></script>
 
-    <!-- Create an element where the map will take place -->
-    <div class="container">
-        <div id="map">
-        </div>
-        <div class="range">
-            <input type="range" min="2000" max="2019" steps="1" value="2019" id="year_input" list="steplist">
-            <datalist id="steplist">
-                <option value="2000"></option>
-                <option value="2001"></option>
-                <option value="2002"></option>
-                <option value="2003"></option>
-                <option value="2004"></option>
-                <option value="2005"></option>
-                <option value="2006"></option>
-                <option value="2007"></option>
-                <option value="2008"></option>
-                <option value="2009"></option>
-                <option value="2010"></option>
-                <option value="2011"></option>
-                <option value="2012"></option>
-                <option value="2013"></option>
-                <option value="2014"></option>
-                <option value="2015"></option>
-                <option value="2016"></option>
-                <option value="2017"></option>
-                <option value="2018"></option>
-                <option value="2019"></option>
-            </datalist>
-            <p>Year: <output id="year"></output></p>
-        </div>
-    </div>
-    <!-- <div class="container"></div> -->
-    <div class="container">
-        <div id="stackedBarChart"></div>
-        <!-- !!! This need to be fixed, it resets the year -->
-        <button onclick="update_sb()">Total</button>
-        <button onclick="update_sb({pollutant: 'TOC'})">TOC</button>
-        <button onclick="update_sb({pollutant: 'Nitrogen'})">Nitrogen</button>
-        <button onclick="update_sb({pollutant: 'Phosphorus'})">Phosphorus</button>
-        <button onclick="update_sb({pollutant: 'Heavy metals (Cd, Hg, Ni, Pb)'})">Heavy metals</button>
-    </div>
 
-    <div class="container">
-        <div id="lineChart"></div>
+    <div position:relative; width="100%" ; height="50%" style="display: flex;">
+        <div id="map" class="item">
+            <!-- <h2>Water scarcity conditions (WEI+)</h2> -->
+        </div>
+        <div id="groupedBarChart" class="item">
+            <div style="float:right" class="range">
+                <input type="range" min="2007" max="2019" steps="1" value="2019" id="year_input" list="steplist">
+                <datalist id="steplist">
+                    <option value="2007"></option>
+                    <option value="2008"></option>
+                    <option value="2009"></option>
+                    <option value="2010"></option>
+                    <option value="2011"></option>
+                    <option value="2012"></option>
+                    <option value="2013"></option>
+                    <option value="2014"></option>
+                    <option value="2015"></option>
+                    <option value="2016"></option>
+                    <option value="2017"></option>
+                    <option value="2018"></option>
+                    <option value="2019"></option>
+                </datalist>
+            </div>
+            <p>Year: <output id="year"></output></p>
+            <!-- !!! This need to be fixed, it resets the year -->
+            <button onclick="update_sb()">Total</button>
+            <button onclick="update_sb({pollutant: 'TOC'})">TOC</button>
+            <button onclick="update_sb({pollutant: 'Nitrogen'})">Nitrogen</button>
+            <button onclick="update_sb({pollutant: 'Phosphorus'})">Phosphorus</button>
+            <button onclick="update_sb({pollutant: 'Heavy metals (Cd, Hg, Ni, Pb)'})">Heavy metals</button>
+
+        </div>
+    </div>
+    <div position:relative; width="100%" ; height="50%" style="display: flex;">
+        <!-- <h2 style="text-align: center;">Industrial pollutant releases to water</h2> -->
+        <div id="stackedBarChart" class="item">
+        </div>
+        <div id="lineChart" class="item">
+        </div>
     </div>
 
     <script>
@@ -75,5 +71,5 @@
             update_sb({ year: event.target.value })
         })
     </script>
-    <!-- <script src="line_chart.js"></script> -->
+    <script src="line_chart.js"></script>
 </body>
