@@ -37,11 +37,12 @@ var bars = svg_sb.append("g").attr("class", "bars");
 
 var groups;
 var pollutants_data;
-d3.csv("./resources/2007_water_pollutants.csv").then(function (data) {
+// d3.csv("./resources/2007_water_pollutants.csv").then(function (data) {
+d3.csv("./resources/water_pollutants.csv").then(function (data) {
     pollutants_data = data;
 
     // List of subgroups = header of the csv files = soil condition here
-    subgroups = pollutants_data.columns.slice(1)
+    subgroups = pollutants_data.columns.slice(3)
 
     // color palette = one color per subgroup
     color = d3.scaleOrdinal()
@@ -52,26 +53,35 @@ d3.csv("./resources/2007_water_pollutants.csv").then(function (data) {
     update_sb()
 })
 
-function update_sb(pollutant = "all") {
-    pollutants_data.sort(function (b, a) {
-        if (pollutant == "all") {
-            a_nitrogen = parseFloat(a.Nitrogen) || 0;
-            a_phosphorus = parseFloat(a.Phosphorus) || 0;
-            a_toc = parseFloat(a.TOC) || 0;
-            a_heavymetals = parseFloat(a['Heavy metals (Cd, Hg, Ni, Pb)']) || 0;
-
-            b_nitrogen = parseFloat(b.Nitrogen) || 0;
-            b_phosphorus = parseFloat(b.Phosphorus) || 0;
-            b_toc = parseFloat(b.TOC) || 0;
-            b_heavymetals = parseFloat(b['Heavy metals (Cd, Hg, Ni, Pb)']) || 0;
-
-            return (a_nitrogen + a_phosphorus + a_toc + a_heavymetals) - (b_nitrogen + b_phosphorus + b_toc + b_heavymetals)
-        } else {
-            return parseFloat(a[pollutant]) - parseFloat(b[pollutant])
+function update_sb({pollutant = "Total", year = "2019"} = {}) {
+    var data_year = pollutants_data.filter(function (d) {
+        if (d.reportingYear == year && d.countryName != "EU") {
+            return d;
         }
+    });
+
+    data_year = data_year.map(function (d) {
+        return {
+            Total: d.Total,
+            countryName: d.countryName,
+            Nitrogen: d.Nitrogen,
+            Phosphorus: d.Phosphorus,
+            TOC: d.TOC,
+            'Heavy metals (Cd, Hg, Ni, Pb)': d['Heavy metals (Cd, Hg, Ni, Pb)']
+        }
+    });
+
+    data_year.sort(function (b, a) {
+        res = parseFloat(a[pollutant]) - parseFloat(b[pollutant])
+        return (isNaN(res) ? 0 : res);
     })
 
-    groups = pollutants_data.map(d => (d.countryName));
+    groups = data_year.map(d => (d.countryName));
+
+    var EU_index = groups.indexOf("EU");
+    if (EU_index !== -1) {
+        groups.splice(EU_index, 1);
+    }
 
     x = d3.scaleBand()
         .domain(groups)
@@ -87,19 +97,19 @@ function update_sb(pollutant = "all") {
         .keys(subgroups)
         // .order(d3.stackOrderDescending)
         .order(series => {
-            if(pollutant == "all") {
+            if (pollutant == "Total") {
                 return d3.stackOrderDescending(series);
             } else {
                 let n = series.length;
                 const o = new Array(n);
                 let i = 0;
-                while(i < n && series[i].key != pollutant){
+                while (i < n && series[i].key != pollutant) {
                     i++;
                 }
                 o[0] = i;
                 let j = 0, k = 1;
-                while(j < n){
-                    if(j != i) {
+                while (j < n) {
+                    if (j != i) {
                         o[k++] = j;
                     }
                     j++;
@@ -107,7 +117,7 @@ function update_sb(pollutant = "all") {
                 return o;
             }
         })
-        (pollutants_data)
+        (data_year)
 
 
     bars

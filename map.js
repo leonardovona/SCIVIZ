@@ -1,11 +1,3 @@
-const value = document.querySelector("#year")
-const input = document.querySelector("#year_input")
-value.textContent = input.value
-input.addEventListener("input", (event) => {
-    value.textContent = event.target.value
-    handle_update(event.target.value)
-})
-
 const width_map = 600, height_map = 550
 
 var svg_map = d3.select("#map")
@@ -22,7 +14,7 @@ var svg_map = d3.select("#map")
 
 var colorScale = d3.scaleThreshold()
     .domain([0.01, 1, 2, 4, 8, 16, 32])
-    .range(d3.schemeBlues[7]);
+    .range(d3.schemeReds[7]);
 
 const data = new Map()
 // Create a function that takes a dataset as input and update the plot:

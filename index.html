@@ -44,14 +44,17 @@
     <!-- <div class="container"></div> -->
     <div class="container">
         <div id="stackedBarChart"></div>
+        <!-- !!! This need to be fixed, it resets the year -->
         <button onclick="update_sb()">Total</button>
-        <button onclick="update_sb('TOC')">TOC</button>
-        <button onclick="update_sb('Nitrogen')">Nitrogen</button>
-        <button onclick="update_sb('Phosphorus')">Phosphorus</button>
-        <button onclick="update_sb('Heavy metals (Cd, Hg, Ni, Pb)')">Heavy metals</button>
+        <button onclick="update_sb({pollutant: 'TOC'})">TOC</button>
+        <button onclick="update_sb({pollutant: 'Nitrogen'})">Nitrogen</button>
+        <button onclick="update_sb({pollutant: 'Phosphorus'})">Phosphorus</button>
+        <button onclick="update_sb({pollutant: 'Heavy metals (Cd, Hg, Ni, Pb)'})">Heavy metals</button>
     </div>
 
-    <div class="container"></div>
+    <div class="container">
+        <div id="lineChart"></div>
+    </div>
 
     <script>
         const EU_members = ["AT", "BE", "BG", "CY", "CZ", "DE", "DK", "EE", "EL", "ES",
@@ -61,4 +64,16 @@
     <script src="map.js"></script>
 
     <script src="stacked_bar_chart.js"></script>
+
+    <script>
+        const value = document.querySelector("#year")
+        const input = document.querySelector("#year_input")
+        value.textContent = input.value
+        input.addEventListener("input", (event) => {
+            value.textContent = event.target.value
+            handle_update(event.target.value)
+            update_sb({ year: event.target.value })
+        })
+    </script>
+    <!-- <script src="line_chart.js"></script> -->
 </body>
