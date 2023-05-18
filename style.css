@@ -31,22 +31,22 @@ html, body {
 
 #map {
     width: 100vh;
-    height: 50vh;
+    height: 60vh;
 }
 
 #groupedBarChart {
     width: 100vh;
-    height: 50vh;
+    height: 60vh;
 }
 
 #stackedBarChart {
     width: 100vh;
-    height: 50vh;
+    height: 40vh;
 }
 
 #lineChart {
     width: 100vh;
-    height: 50vh;
+    height: 40vh;
 }
 
 /* .container {

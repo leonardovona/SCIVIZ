@@ -11,7 +11,7 @@
     <script src="https://d3js.org/d3.v6.js"></script>
 
 
-    <div position:relative; width="100%" ; height="50%" style="display: flex;">
+    <div position:relative; width="100%" ; height="60%" style="display: flex;">
         <div id="map" class="item">
             <!-- <h2>Water scarcity conditions (WEI+)</h2> -->
         </div>
@@ -41,10 +41,10 @@
             <button onclick="update_sb({pollutant: 'Nitrogen'})">Nitrogen</button>
             <button onclick="update_sb({pollutant: 'Phosphorus'})">Phosphorus</button>
             <button onclick="update_sb({pollutant: 'Heavy metals (Cd, Hg, Ni, Pb)'})">Heavy metals</button>
-
+            <p><output id="country">EU</output></p>
         </div>
     </div>
-    <div position:relative; width="100%" ; height="50%" style="display: flex;">
+    <div position:relative; width="100%" ; height="40%" style="display: flex;">
         <!-- <h2 style="text-align: center;">Industrial pollutant releases to water</h2> -->
         <div id="stackedBarChart" class="item">
         </div>
@@ -55,6 +55,17 @@
     <script>
         const EU_members = ["AT", "BE", "BG", "CY", "CZ", "DE", "DK", "EE", "EL", "ES",
             "FI", "FR", "HR", "HU", "IE", "IT", "LT", "LU", "LV", "MT", "NL", "PL", "PT", "RO", "SE", "SI", "SK"]
+    </script>
+
+    <script src="line_chart.js"></script>
+
+    <script>
+        let click = function (d) {
+            if (EU_members.includes(d.srcElement.__data__.properties.ID)) {
+                document.getElementById("country").value = d.srcElement.__data__.properties.NAME
+                update_line_chart({ country: d.srcElement.__data__.properties.ID })
+            }
+        }
     </script>
 
     <script src="map.js"></script>
@@ -71,5 +82,4 @@
             update_sb({ year: event.target.value })
         })
     </script>
-    <script src="line_chart.js"></script>
 </body>

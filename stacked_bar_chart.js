@@ -25,7 +25,7 @@ x_axis = svg_sb.append("g")
     .attr("transform", "translate(0," + height_sb + ")")
 
 y = d3.scaleLinear()
-    .domain([0, 170000000])
+    .domain([0, 190000000])
     .range([height_sb, 0]);
 
 // Not sure if goes here

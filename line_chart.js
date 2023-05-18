@@ -20,6 +20,8 @@ const svg_line = lineChartContainer
     .append("g")
     .attr("transform", `translate(${margin_line.left},${margin_line.top})`);
 
+var line_data;
+var x_line, y_line, yAxis;
 //Read the data
 d3.csv("./resources/water_pollutants.csv",
 
@@ -36,80 +38,197 @@ d3.csv("./resources/water_pollutants.csv",
 ).then(
     // Now I can use this dataset:
     function (data) {
-        data = data.filter(function (d) {
-            // need to fix in the dataset the year
-            if (d.countryName == "EU" && d.reportingYear <= 2019) {
+        line_data = data.filter(function (d) {
+            if (d.reportingYear <= 2019) {
                 return d;
-            }
-        });
-        data = data.map(function (d) {
-            return {
-                year: d.reportingYear,
-                'TOC': d['TOC'],
-                'Nitrogen': d['Nitrogen'],
-                'Phosphorus': d['Phosphorus'],
-                'Heavy metals (Cd, Hg, Ni, Pb)': d['Heavy metals (Cd, Hg, Ni, Pb)']
             }
         });
 
         // Add X axis --> it is a date format
-        const x = d3.scaleTime()
-            .domain(d3.extent(data, function (d) { return d.year; }))
+        x_line = d3.scaleTime()
+            .domain(d3.extent(line_data, function (d) { return d.reportingYear; }))
             .range([0, (width_line - margin_line.right)]);
+
         svg_line.append("g")
             .attr("transform", `translate(0, ${height_line})`)
-            .call(d3.axisBottom(x));
+            .call(d3.axisBottom(x_line));
+
 
         // Add Y axis
-        const y = d3.scaleLinear()
+        y_line = d3.scaleLinear()
             .domain([0, 550000000])
             //.domain([0, d3.max(data, function (d) { return +d['TOC']; })])
             .range([height_line, 0]);
+
+        yAxis = d3.axisLeft(y_line);
+
         svg_line.append("g")
-            .call(d3.axisLeft(y));
+            // .call(d3.axisLeft(y_line))
+            .attr("class", "y-axis");
 
-        // Add the line
-        svg_line.append("path")
-            .datum(data)
-            .attr("fill", "none")
-            .attr("stroke", "#e41a1c")
-            .attr("stroke-width", 1.5)
-            .attr("d", d3.line()
-                .x(function (d) { return x(d.year) })
-                .y(function (d) { return y(d['Nitrogen']) })
-            )
+        // var res = line_data.map(function (d) { console.log(d); return d.key }) // list of group names
+        // var color = d3.scaleOrdinal()
+        //     .domain(res)
+        //     .range(['#e41a1c', '#377eb8', '#4daf4a', '#834aaf'])
 
-        // Add the line
-        svg_line.append("path")
-            .datum(data)
-            .attr("fill", "none")
-            .attr("stroke", "#377eb8")
-            .attr("stroke-width", 1.5)
-            .attr("d", d3.line()
-                .x(function (d) { return x(d.year) })
-                .y(function (d) { return y(d['Phosphorus']) })
-            )
+        // Draw the line
+        // svg.selectAll(".line")
+        //     .data(sumstat)
+        //     .enter()
+        //     .append("path")
+        //     .attr("fill", "none")
+        //     .attr("stroke", function (d) { return color(d.key) })
+        //     .attr("stroke-width", 1.5)
+        //     .attr("d", function (d) {
+        //         return d3.line()
+        //             .x(function (d) { return x(d.year); })
+        //             .y(function (d) { return y(+d.n); })
+        //             (d.values)
+        //     })
 
-        // Add the line
-        svg_line.append("path")
-            .datum(data)
-            .attr("fill", "none")
-            .attr("stroke", "#4daf4a")
-            .attr("stroke-width", 1.5)
-            .attr("d", d3.line()
-                .x(function (d) { return x(d.year) })
-                .y(function (d) { return y(d['TOC']) })
-            )
 
-        // Add the line
-        svg_line.append("path")
-            .datum(data)
-            .attr("fill", "none")
-            .attr("stroke", "#834aaf")
-            .attr("stroke-width", 1.5)
-            .attr("d", d3.line()
-                .x(function (d) { return x(d.year) })
-                .y(function (d) { return y(d['Heavy metals (Cd, Hg, Ni, Pb)']) })
-            )
-
+        update_line_chart()
     })
+
+function update_line_chart({ country = "EU" } = {}) {
+    var data = line_data.filter(function (d) {
+        // need to fix in the dataset the year
+        if (d.countryName == country) {
+            return d;
+        }
+    });
+    // data = data.map(function (d) {
+    //     return {
+    //         year: d.reportingYear,
+    //         'TOC': d['TOC'],
+    //         'Nitrogen': d['Nitrogen'],
+    //         'Phosphorus': d['Phosphorus'],
+    //         'Heavy metals (Cd, Hg, Ni, Pb)': d['Heavy metals (Cd, Hg, Ni, Pb)']
+    //     }
+    // });
+    // console.log(line_data)
+
+    // if(country == "EU"){
+    //     y_max = 550000000
+    // }else{
+    //     y_max = 150000000
+    // }
+
+    y_line.domain([0, d3.max(data, function (d) {
+        return Math.max(
+            parseInt(d.Nitrogen),
+            parseInt(d.Phosphorus),
+            parseInt(d.TOC),
+        parseInt(d['Heavy metals (Cd, Hg, Ni, Pb)'])) })]);
+    svg_line.selectAll(".y-axis").transition()
+        .duration(1000)
+        .call(yAxis);
+
+    const u_n = svg_line.selectAll(".line_n")
+        .data([data], function (d) { return d.reportingYear });
+
+    const u_p = svg_line.selectAll(".line_p")
+        .data([data], function (d) { return d.reportingYear });
+
+    const u_t = svg_line.selectAll(".line_t")
+            .data([data], function (d) { return d.reportingYear });
+
+    const u_h = svg_line.selectAll(".line_h")
+        .data([data], function (d) { return d.reportingYear });
+
+
+    // Updata the line
+    u_n
+        .join("path")
+        .attr("class", "line_n")
+        .transition()
+        .duration(1000)
+        .attr("d", d3.line()
+            .x(function (d) { return x_line(d.reportingYear); })
+            .y(function (d) { return y_line(d.Nitrogen); }))
+        .attr("fill", "none")
+        .attr("stroke", "#e41a1c")
+        .attr("stroke-width", 2.5)
+
+    u_p
+        .join("path")
+        .attr("class", "line_p")
+        .transition()
+        .duration(1000)
+        .attr("d", d3.line()
+            .x(function (d) { return x_line(d.reportingYear); })
+            .y(function (d) { return y_line(d.Phosphorus); }))
+        .attr("fill", "none")
+        .attr("stroke", "#377eb8")
+        .attr("stroke-width", 2.5)
+
+    u_t
+        .join("path")
+        .attr("class", "line_t")
+        .transition()
+        .duration(1000)
+        .attr("d", d3.line()
+            .x(function (d) { return x_line(d.reportingYear); })
+            .y(function (d) { return y_line(d.TOC); }))
+        .attr("fill", "none")
+        .attr("stroke", "#4daf4a")
+        .attr("stroke-width", 2.5)
+
+    u_h
+        .join("path")
+        .attr("class", "line_h")
+        .transition()
+        .duration(3000)
+        .attr("d", d3.line()
+            .x(function (d) { return x_line(d.reportingYear); })
+            .y(function (d) { return y_line(d['Heavy metals (Cd, Hg, Ni, Pb)']); }))
+        .attr("fill", "none")
+        .attr("stroke", "#834aaf")
+        .attr("stroke-width", 2.5)
+
+    /*
+    // update_line_chart
+    // Add the line
+    svg_line.append("path")
+        .datum(line_data)
+        .attr("fill", "none")
+        .attr("stroke", "#e41a1c")
+        .attr("stroke-width", 1.5)
+        .attr("d", d3.line()
+            .x(function (d) { return x_line(d.reportingYear) })
+            .y(function (d) { return y_line(d['Nitrogen']) })
+        )
+
+    // Add the line
+    svg_line.append("path")
+        .datum(line_data)
+        .attr("fill", "none")
+        .attr("stroke", "#377eb8")
+        .attr("stroke-width", 1.5)
+        .attr("d", d3.line()
+            .x(function (d) { return x_line(d.reportingYear) })
+            .y(function (d) { return y_line(d['Phosphorus']) })
+        )
+
+    // Add the line
+    svg_line.append("path")
+        .datum(line_data)
+        .attr("fill", "none")
+        .attr("stroke", "#4daf4a")
+        .attr("stroke-width", 1.5)
+        .attr("d", d3.line()
+            .x(function (d) { return x_line(d.reportingYear) })
+            .y(function (d) { return y_line(d['TOC']) })
+        )
+
+    // Add the line
+    svg_line.append("path")
+        .datum(line_data)
+        .attr("fill", "none")
+        .attr("stroke", "#834aaf")
+        .attr("stroke-width", 1.5)
+        .attr("d", d3.line()
+            .x(function (d) { return x_line(d.reportingYear) })
+            .y(function (d) { return y_line(d['Heavy metals (Cd, Hg, Ni, Pb)']) })
+        )*/
+}

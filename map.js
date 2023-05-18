@@ -12,7 +12,7 @@ var svg_map = d3.select("#map")
     .attr("height", "100%")
     // .attr("preserveAspectRatio", "none")
     .attr("preserveAspectRatio", "xMinYMin meet")
-    // .classed("svg-content-responsive", true)
+// .classed("svg-content-responsive", true)
 
 var colorScale = d3.scaleThreshold()
     .domain([0.01, 1, 2, 4, 8, 16, 32])
@@ -104,6 +104,7 @@ Promise.all([
             .on("mouseover", mouseOver)
             .on("mousemove", mouseMove)
             .on("mouseleave", mouseLeave)
+            .on("click", click)
 
         handle_update("2019")
 
