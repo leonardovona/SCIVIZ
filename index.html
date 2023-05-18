@@ -3,6 +3,10 @@
 
 <head>
     <link rel="stylesheet" href="style.css">
+    <script type="module">
+        import { updateStackedBarChart } from './js/stackedBarChart.js';
+        window.updateStackedBarChart = updateStackedBarChart;
+    </script>
 </head>
 
 <body>
@@ -36,11 +40,11 @@
             </div>
             <p>Year: <output id="year"></output></p>
             <!-- !!! This need to be fixed, it resets the year -->
-            <button onclick="update_sb()">Total</button>
-            <button onclick="update_sb({pollutant: 'TOC'})">TOC</button>
-            <button onclick="update_sb({pollutant: 'Nitrogen'})">Nitrogen</button>
-            <button onclick="update_sb({pollutant: 'Phosphorus'})">Phosphorus</button>
-            <button onclick="update_sb({pollutant: 'Heavy metals (Cd, Hg, Ni, Pb)'})">Heavy metals</button>
+            <button onclick="updateStackedBarChart()">Total</button>
+            <button onclick="updateStackedBarChart({pollutant: 'TOC'})">TOC</button>
+            <button onclick="updateStackedBarChart({pollutant: 'Nitrogen'})">Nitrogen</button>
+            <button onclick="updateStackedBarChart({pollutant: 'Phosphorus'})">Phosphorus</button>
+            <button onclick="updateStackedBarChart({pollutant: 'Heavy metals (Cd, Hg, Ni, Pb)'})">Heavy metals</button>
             <p><output id="country">EU</output></p>
         </div>
     </div>
@@ -52,34 +56,5 @@
         </div>
     </div>
 
-    <script>
-        const EU_members = ["AT", "BE", "BG", "CY", "CZ", "DE", "DK", "EE", "EL", "ES",
-            "FI", "FR", "HR", "HU", "IE", "IT", "LT", "LU", "LV", "MT", "NL", "PL", "PT", "RO", "SE", "SI", "SK"]
-    </script>
-
-    <script src="line_chart.js"></script>
-
-    <script>
-        let click = function (d) {
-            if (EU_members.includes(d.srcElement.__data__.properties.ID)) {
-                document.getElementById("country").value = d.srcElement.__data__.properties.NAME
-                update_line_chart({ country: d.srcElement.__data__.properties.ID })
-            }
-        }
-    </script>
-
-    <script src="map.js"></script>
-
-    <script src="stacked_bar_chart.js"></script>
-
-    <script>
-        const value = document.querySelector("#year")
-        const input = document.querySelector("#year_input")
-        value.textContent = input.value
-        input.addEventListener("input", (event) => {
-            value.textContent = event.target.value
-            handle_update(event.target.value)
-            update_sb({ year: event.target.value })
-        })
-    </script>
+    <script type="module" src="./js/main.js"></script>
 </body>

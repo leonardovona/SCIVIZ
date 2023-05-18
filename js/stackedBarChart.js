@@ -1,4 +1,5 @@
 //Stacked bar chart
+var x_axis, y, subgroups, groups, pollutants_data, bars, color;
 
 // set the dimensions and margins of the graph
 const margin_sb = { top: 10, right: 30, bottom: 40, left: 70 },
@@ -7,52 +8,55 @@ const margin_sb = { top: 10, right: 30, bottom: 40, left: 70 },
 const stackedBarChartContainer = d3.select("#stackedBarChart")
 const width_sb = stackedBarChartContainer.node().getBoundingClientRect().width - margin_sb.left - margin_sb.right
 
-// append the svg object to the body of the page
-const svg_sb = stackedBarChartContainer
-    .classed("svg-container", true)
-    .append("svg")
-    .attr(
-        "viewBox",
-        `-${margin_sb.left} -${margin_sb.top} ${width_sb + margin_sb.left + margin_sb.right} ${height_sb + margin_sb.top + margin_sb.bottom}`
-    )
-    .attr("preserveAspectRatio", "xMinYMin meet")
-    // .classed("svg-content-responsive", true)
-    .attr("height", "100%")
-    .append("g")
+export function drawStackedBarChart() {
 
-// Add X axis
-x_axis = svg_sb.append("g")
-    .attr("transform", "translate(0," + height_sb + ")")
 
-y = d3.scaleLinear()
-    .domain([0, 190000000])
-    .range([height_sb, 0]);
 
-// Not sure if goes here
-svg_sb.append("g")
-    .call(d3.axisLeft(y));
+    // append the svg object to the body of the page
+    const svg_sb = stackedBarChartContainer
+        .classed("svg-container", true)
+        .append("svg")
+        .attr(
+            "viewBox",
+            `-${margin_sb.left} -${margin_sb.top} ${width_sb + margin_sb.left + margin_sb.right} ${height_sb + margin_sb.top + margin_sb.bottom}`
+        )
+        .attr("preserveAspectRatio", "xMinYMin meet")
+        // .classed("svg-content-responsive", true)
+        .attr("height", "100%")
+        .append("g")
 
-var bars = svg_sb.append("g").attr("class", "bars");
+    // Add X axis
+    x_axis = svg_sb.append("g")
+        .attr("transform", "translate(0," + height_sb + ")")
 
-var groups;
-var pollutants_data;
-// d3.csv("./resources/2007_water_pollutants.csv").then(function (data) {
-d3.csv("./resources/water_pollutants.csv").then(function (data) {
-    pollutants_data = data;
+    y = d3.scaleLinear()
+        .domain([0, 190000000])
+        .range([height_sb, 0]);
 
-    // List of subgroups = header of the csv files = soil condition here
-    subgroups = pollutants_data.columns.slice(3)
+    // Not sure if goes here
+    svg_sb.append("g")
+        .call(d3.axisLeft(y));
 
-    // color palette = one color per subgroup
-    color = d3.scaleOrdinal()
-        .domain(subgroups)
-        .range(['#e41a1c', '#377eb8', '#4daf4a', '#834aaf'])
+    bars = svg_sb.append("g").attr("class", "bars");
 
-    // console.log(stackedData)
-    update_sb()
-})
+    // d3.csv("./resources/2007_water_pollutants.csv").then(function (data) {
+    d3.csv("./resources/water_pollutants.csv").then(function (data) {
+        pollutants_data = data;
 
-function update_sb({ pollutant = "Total", year = "2019" } = {}) {
+        // List of subgroups = header of the csv files = soil condition here
+        subgroups = pollutants_data.columns.slice(3)
+
+        // color palette = one color per subgroup
+        color = d3.scaleOrdinal()
+            .domain(subgroups)
+            .range(['#e41a1c', '#377eb8', '#4daf4a', '#834aaf'])
+
+        // console.log(stackedData)
+        updateStackedBarChart()
+    })
+}
+
+export function updateStackedBarChart({ pollutant = "Total", year = "2019" } = {}) {
     var data_year = pollutants_data.filter(function (d) {
         if (d.reportingYear == year && d.countryName != "EU") {
             return d;
@@ -71,7 +75,7 @@ function update_sb({ pollutant = "Total", year = "2019" } = {}) {
     });
 
     data_year.sort(function (b, a) {
-        res = parseFloat(a[pollutant]) - parseFloat(b[pollutant])
+        var res = parseFloat(a[pollutant]) - parseFloat(b[pollutant])
         return (isNaN(res) ? 0 : res);
     })
 
@@ -82,7 +86,7 @@ function update_sb({ pollutant = "Total", year = "2019" } = {}) {
         groups.splice(EU_index, 1);
     }
 
-    x = d3.scaleBand()
+    const x = d3.scaleBand()
         .domain(groups)
         .range([0, width_sb])
         .padding([0.2])

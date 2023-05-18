@@ -1,5 +1,4 @@
 // set the dimensions and margins of the graph
-
 const margin_line = { top: 10, right: 50, bottom: 40, left: 40 },
     // width_line = 550 ,
     height_line = 400 - margin_line.top - margin_line.bottom;
@@ -7,90 +6,96 @@ const margin_line = { top: 10, right: 50, bottom: 40, left: 40 },
 const lineChartContainer = d3.select("#lineChart")
 const width_line = lineChartContainer.node().getBoundingClientRect().width - margin_line.left - margin_line.right
 
-// append the svg object to the body of the page
-const svg_line = lineChartContainer
-    .append("svg")
-    .attr(
-        "viewBox",
-        `-${margin_line.left} -${margin_line.top} ${width_line + margin_line.left + margin_line.right} ${height_line + margin_line.top + margin_line.bottom}`
-    )
-    .attr("height", "100%")
-    // .attr("preserveAspectRatio", "xMinYMin meet")
-    // .classed("svg-content-responsive", true)
-    .append("g")
-    .attr("transform", `translate(${margin_line.left},${margin_line.top})`);
-
 var line_data;
 var x_line, y_line, yAxis;
-//Read the data
-d3.csv("./resources/water_pollutants.csv",
+var svg_line
 
-    // When reading the csv, I must format variables:
-    // function (d) {
-    //     // d = d.filter(function (d) {
-    //     //     if (d.countryName == "EU") {
-    //     //         return d;
-    //     //     }
-    //     // });
-    //     console.log(d)
-    //     return { year: d.reportingYear, value: d.TOC }
-    // }).then(
-).then(
-    // Now I can use this dataset:
-    function (data) {
-        line_data = data.filter(function (d) {
-            if (d.reportingYear <= 2019) {
-                return d;
-            }
-        });
-
-        // Add X axis --> it is a date format
-        x_line = d3.scaleTime()
-            .domain(d3.extent(line_data, function (d) { return d.reportingYear; }))
-            .range([0, (width_line - margin_line.right)]);
-
-        svg_line.append("g")
-            .attr("transform", `translate(0, ${height_line})`)
-            .call(d3.axisBottom(x_line));
+export function drawLineChart() {
 
 
-        // Add Y axis
-        y_line = d3.scaleLinear()
-            .domain([0, 550000000])
-            //.domain([0, d3.max(data, function (d) { return +d['TOC']; })])
-            .range([height_line, 0]);
+    // append the svg object to the body of the page
+    svg_line = lineChartContainer
+        .append("svg")
+        .attr(
+            "viewBox",
+            `-${margin_line.left} -${margin_line.top} ${width_line + margin_line.left + margin_line.right} ${height_line + margin_line.top + margin_line.bottom}`
+        )
+        .attr("height", "100%")
+        // .attr("preserveAspectRatio", "xMinYMin meet")
+        // .classed("svg-content-responsive", true)
+        .append("g")
+        .attr("transform", `translate(${margin_line.left},${margin_line.top})`);
 
-        yAxis = d3.axisLeft(y_line);
+    //Read the data
+    d3.csv("./resources/water_pollutants.csv",
 
-        svg_line.append("g")
-            // .call(d3.axisLeft(y_line))
-            .attr("class", "y-axis");
+        // When reading the csv, I must format variables:
+        // function (d) {
+        //     // d = d.filter(function (d) {
+        //     //     if (d.countryName == "EU") {
+        //     //         return d;
+        //     //     }
+        //     // });
+        //     console.log(d)
+        //     return { year: d.reportingYear, value: d.TOC }
+        // }).then(
+    ).then(
+        // Now I can use this dataset:
+        function (data) {
+            line_data = data.filter(function (d) {
+                if (d.reportingYear <= 2019) {
+                    return d;
+                }
+            });
 
-        // var res = line_data.map(function (d) { console.log(d); return d.key }) // list of group names
-        // var color = d3.scaleOrdinal()
-        //     .domain(res)
-        //     .range(['#e41a1c', '#377eb8', '#4daf4a', '#834aaf'])
+            // Add X axis --> it is a date format
+            x_line = d3.scaleTime()
+                .domain(d3.extent(line_data, function (d) { return d.reportingYear; }))
+                .range([0, (width_line - margin_line.right)]);
 
-        // Draw the line
-        // svg.selectAll(".line")
-        //     .data(sumstat)
-        //     .enter()
-        //     .append("path")
-        //     .attr("fill", "none")
-        //     .attr("stroke", function (d) { return color(d.key) })
-        //     .attr("stroke-width", 1.5)
-        //     .attr("d", function (d) {
-        //         return d3.line()
-        //             .x(function (d) { return x(d.year); })
-        //             .y(function (d) { return y(+d.n); })
-        //             (d.values)
-        //     })
+            svg_line.append("g")
+                .attr("transform", `translate(0, ${height_line})`)
+                .call(d3.axisBottom(x_line));
 
 
-        update_line_chart()
-    })
+            // Add Y axis
+            y_line = d3.scaleLinear()
+                .domain([0, 550000000])
+                //.domain([0, d3.max(data, function (d) { return +d['TOC']; })])
+                .range([height_line, 0]);
 
-function update_line_chart({ country = "EU" } = {}) {
+            yAxis = d3.axisLeft(y_line);
+
+            svg_line.append("g")
+                // .call(d3.axisLeft(y_line))
+                .attr("class", "y-axis");
+
+            // var res = line_data.map(function (d) { console.log(d); return d.key }) // list of group names
+            // var color = d3.scaleOrdinal()
+            //     .domain(res)
+            //     .range(['#e41a1c', '#377eb8', '#4daf4a', '#834aaf'])
+
+            // Draw the line
+            // svg.selectAll(".line")
+            //     .data(sumstat)
+            //     .enter()
+            //     .append("path")
+            //     .attr("fill", "none")
+            //     .attr("stroke", function (d) { return color(d.key) })
+            //     .attr("stroke-width", 1.5)
+            //     .attr("d", function (d) {
+            //         return d3.line()
+            //             .x(function (d) { return x(d.year); })
+            //             .y(function (d) { return y(+d.n); })
+            //             (d.values)
+            //     })
+
+
+            updateLineChart()
+        })
+}
+
+export function updateLineChart({ country = "EU" } = {}) {
     var data = line_data.filter(function (d) {
         // need to fix in the dataset the year
         if (d.countryName == country) {
@@ -119,7 +124,8 @@ function update_line_chart({ country = "EU" } = {}) {
             parseInt(d.Nitrogen),
             parseInt(d.Phosphorus),
             parseInt(d.TOC),
-        parseInt(d['Heavy metals (Cd, Hg, Ni, Pb)'])) })]);
+            parseInt(d['Heavy metals (Cd, Hg, Ni, Pb)']))
+    })]);
     svg_line.selectAll(".y-axis").transition()
         .duration(1000)
         .call(yAxis);
@@ -131,7 +137,7 @@ function update_line_chart({ country = "EU" } = {}) {
         .data([data], function (d) { return d.reportingYear });
 
     const u_t = svg_line.selectAll(".line_t")
-            .data([data], function (d) { return d.reportingYear });
+        .data([data], function (d) { return d.reportingYear });
 
     const u_h = svg_line.selectAll(".line_h")
         .data([data], function (d) { return d.reportingYear });
