@@ -2,7 +2,7 @@
 var x_axis, y, subgroups, groups, pollutants_data, bars, color;
 
 // set the dimensions and margins of the graph
-const margin_sb = { top: 10, right: 30, bottom: 40, left: 70 },
+const margin_sb = { top: 30, right: 0, bottom: 40, left: 80 },
     height_sb = 500 - margin_sb.top - margin_sb.bottom;
 
 const stackedBarChartContainer = d3.select("#stackedBarChart")
@@ -36,6 +36,15 @@ export function drawStackedBarChart() {
     // Not sure if goes here
     svg_sb.append("g")
         .call(d3.axisLeft(y));
+
+    svg_sb.append("text")
+        .attr("class", "y label")
+        .attr("text-anchor", "end")
+        .attr("x", -10)
+        // .attr("y", 0)
+        .attr("dy", ".15em")
+        // .attr("transform", "rotate(-90)")
+        .text("kg");
 
     bars = svg_sb.append("g").attr("class", "bars");
 

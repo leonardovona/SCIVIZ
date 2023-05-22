@@ -15,6 +15,10 @@ html, body {
     overflow: hidden
 }
 
+body {
+    background-color: steelblue;
+}
+
 .container {
     display: flex;
     position: relative;
@@ -24,29 +28,29 @@ html, body {
 
 .item {
     flex-grow: 1;
-    margin: 0 5px;
+    margin: 1vh;
     border-radius: 5px;
-    
+    background-color: white;
 }
 
 #map {
     width: 100vh;
-    height: 60vh;
+    height: 58vh;
 }
 
 #groupedBarChart {
     width: 100vh;
-    height: 60vh;
+    height: 58vh;
 }
 
 #stackedBarChart {
     width: 100vh;
-    height: 40vh;
+    height: 38vh;
 }
 
 #lineChart {
     width: 100vh;
-    height: 40vh;
+    height: 38vh;
 }
 
 /* .container {

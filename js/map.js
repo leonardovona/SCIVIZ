@@ -20,6 +20,12 @@ export function drawMap() {
         // .attr("preserveAspectRatio", "none")
         .attr("preserveAspectRatio", "xMinYMin meet")
     // .classed("svg-content-responsive", true)
+    
+    svg_map.append("text")
+        .text("Water scarcity conditions (WEI+)")
+        .attr("x", 15)
+        .attr("y", 30)
+        .attr("font-size", "20px")
 
     colorScale = d3.scaleThreshold()
         .domain([0.01, 1, 2, 4, 8, 16, 32])

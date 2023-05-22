@@ -1,5 +1,5 @@
 // set the dimensions and margins of the graph
-const margin_line = { top: 10, right: 50, bottom: 40, left: 40 },
+const margin_line = { top: 15, right:40, bottom: 50, left: 40 },
     // width_line = 550 ,
     height_line = 400 - margin_line.top - margin_line.bottom;
 
@@ -28,7 +28,17 @@ export function drawLineChart() {
 
     //Read the data
     d3.csv("./resources/water_pollutants.csv",
-
+        function (d) {
+            return {
+                reportingYear: new Date(parseInt(d.reportingYear), 0),
+                countryName: d.countryName,
+                Total: parseFloat(d.Total),
+                Nitrogen: parseFloat(d.Nitrogen),
+                Phosphorus: parseFloat(d.Phosphorus),
+                TOC: parseFloat(d.TOC),
+                'Heavy metals (Cd, Hg, Ni, Pb)': parseFloat(d['Heavy metals (Cd, Hg, Ni, Pb)'])
+            }
+        }
         // When reading the csv, I must format variables:
         // function (d) {
         //     // d = d.filter(function (d) {
@@ -43,7 +53,7 @@ export function drawLineChart() {
         // Now I can use this dataset:
         function (data) {
             line_data = data.filter(function (d) {
-                if (d.reportingYear <= 2019) {
+                if (d.reportingYear <= new Date(2019, 0)) {
                     return d;
                 }
             });
@@ -57,6 +67,13 @@ export function drawLineChart() {
                 .attr("transform", `translate(0, ${height_line})`)
                 .call(d3.axisBottom(x_line));
 
+            svg_line.append("text")
+                .attr("class", "x label")
+                .attr("text-anchor", "end")
+                .attr("x", width_line)
+                .attr("y", height_line)
+                .text("Year");
+
 
             // Add Y axis
             y_line = d3.scaleLinear()
@@ -69,6 +86,15 @@ export function drawLineChart() {
             svg_line.append("g")
                 // .call(d3.axisLeft(y_line))
                 .attr("class", "y-axis");
+
+            svg_line.append("text")
+                .attr("class", "y label")
+                .attr("text-anchor", "end")
+                .attr("x", -10)
+                // .attr("y", 0)
+                .attr("dy", "-.30em")
+                // .attr("transform", "rotate(-90)")
+                .text("kg");
 
             // var res = line_data.map(function (d) { console.log(d); return d.key }) // list of group names
             // var color = d3.scaleOrdinal()

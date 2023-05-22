@@ -14,7 +14,6 @@ TO DO:
 - Handle small countries, which are not clickable in the map
 - Handle different scales for pollutants
 - Fix x-axis of multi line chart
-- Insert grouped bar chart for water abstraction by economic sector
 - Make the tooltip prettier
 - Make the range slider prettier
 - Add label to axes
