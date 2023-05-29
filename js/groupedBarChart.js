@@ -1,7 +1,7 @@
 // set the dimensions and margins of the graph
-const margin = { top: 10, right: 50, bottom: 60, left: 50 },
+const margin = { top: 10, right: 50, bottom: 60, left: 34 },
     width = 600 - margin.left - margin.right,
-    height = 340 - margin.top - margin.bottom;
+    height = 330 - margin.top - margin.bottom;
 
 var svg, abstractionData, y, color, x, xSubgroup, subgroups, yAxis;
 
@@ -55,6 +55,7 @@ export function drawGroupedBarChart() {
         svg.append("text")
             .attr("class", "x label")
             .attr("text-anchor", "end")
+            .attr("font-size", "0.8em")
             .attr("x", width)
             .attr("y", height - 10)
             .text("Year");
@@ -78,8 +79,9 @@ export function drawGroupedBarChart() {
         svg.append("text")
             .attr("class", "y label")
             .attr("text-anchor", "end")
-            .attr("x", -20)
-            // .attr("y", 0)
+            .attr("font-size", "0.8em")
+            .attr("x", 0)
+            .attr("y", -10)
             .attr("dy", ".15em")
             // .attr("transform", "rotate(-90)")
             .text("Million m³");

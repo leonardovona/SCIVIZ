@@ -88,8 +88,8 @@ export function drawLineChart() {
             svg_line.append("text")
                 .attr("class", "y label")
                 .attr("text-anchor", "end")
-                .attr("x", -10)
-                // .attr("y", 0)
+                .attr("x", 0)
+                .attr("y", -5)
                 .attr("dy", "-.30em")
                 // .attr("transform", "rotate(-90)")
                 .text("kg");

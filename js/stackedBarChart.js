@@ -2,7 +2,7 @@
 var x_axis, y, subgroups, groups, pollutants_data, bars, color;
 
 // set the dimensions and margins of the graph
-const margin = { top: 20, right: 0, bottom: 40, left: 80 },
+const margin = { top: 30, right: 0, bottom: 40, left: 80 },
     height = 320 - margin.top - margin.bottom;
 
 const stackedBarChartContainer = d3.select("#stackedBarChart")
@@ -37,8 +37,8 @@ export function drawStackedBarChart() {
     svg_sb.append("text")
         .attr("class", "y label")
         .attr("text-anchor", "end")
-        .attr("x", -10)
-        // .attr("y", 0)
+        .attr("x", 0)
+        .attr("y", -10)
         .attr("dy", ".15em")
         // .attr("transform", "rotate(-90)")
         .text("kg");
@@ -71,6 +71,38 @@ export function drawStackedBarChart() {
             .classed("svg-content", true)
             .append("g")
 
+        let mouseOver = function (d) {
+            console.log(d.srcElement.__data__[0])
+            d3.selectAll(".legend-dot-stacked-bar")
+                .transition()
+                .duration(200)
+                .style("opacity", .5)
+            d3.select("#legend-dot-stacked-bar-" + d.srcElement.__data__[0])
+                .transition()
+                .duration(200)
+                .style("opacity", 1)
+            d3.selectAll(".legend-text-stacked-bar")
+                .transition()
+                .duration(200)
+                .style("opacity", .5)
+            d3.select("#legend-text-stacked-bar-" + d.srcElement.__data__[0])
+                .transition()
+                .duration(200)
+                .style("opacity", 1)
+        }
+
+        let mouseLeave = function (d) {
+            d3.selectAll(".legend-dot-stacked-bar")
+                .transition()
+                .duration(200)
+                .style("opacity", 1)
+            d3.selectAll(".legend-text-stacked-bar")
+                .transition()
+                .duration(200)
+                .style("opacity", 1)
+        }
+
+
         // Add one dot in the legend for each name.
         svg_legend.selectAll("mydots")
             .data(subgroups)
@@ -80,7 +112,32 @@ export function drawStackedBarChart() {
             .attr("cy", function (d, i) { return 20 + i * 40 }) // 100 is where the first dot appears. 25 is the distance between dots
             .attr("r", 10)
             .style("fill", function (d) { return color(d) })
+            .attr("class", "legend-dot-stacked-bar")
+            .attr("id", function (d) { return "legend-dot-stacked-bar-" + d[0] })
+            .attr("cursor", "pointer")
+            .on("mouseover", mouseOver)
+            .on("mouseleave", mouseLeave)
 
+        // let mouseOverText = function (d) {
+        //     d3.selectAll(".legend-text-stacked-bar")
+        //         .transition()
+        //         .duration(200)
+        //         .style("opacity", .5)
+        //     // .style("stroke", "transparent")
+        //     d3.select(this)
+        //         .transition()
+        //         .duration(200)
+        //         .style("opacity", 1)
+        //     // .style("stroke", "black")
+        // }
+
+        // let mouseLeaveText = function (d) {
+        //     d3.selectAll(".legend-text-stacked-bar")
+        //         .transition()
+        //         .duration(200)
+        //         .style("opacity", 1)
+        //     // .style("stroke", "transparent")
+        // }
 
         // Add one dot in the legend for each name.
         svg_legend.selectAll("mylabels")
@@ -91,8 +148,16 @@ export function drawStackedBarChart() {
             .attr("y", function (d, i) { return 20 + i * 40 }) // 100 is where the first dot appears. 25 is the distance between dots
             .style("fill", function (d) { return color(d) })
             .text(function (d) { return d })
+            .attr("class", "legend-text-stacked-bar")
+            .attr("id", function (d) { return "legend-text-stacked-bar-" + d[0] })
+            .attr("cursor", "pointer")
             .attr("text-anchor", "left")
             .style("alignment-baseline", "middle")
+            .on("mouseover", mouseOver)
+            .on("mouseleave", mouseLeave)
+            .on("click", function (d) {
+                updateStackedBarChart({ pollutant: d.srcElement.__data__ })
+            })
 
         // console.log(stackedData)
         updateStackedBarChart()

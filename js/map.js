@@ -2,10 +2,10 @@ import { EU_members, click } from "./main.js"
 
 const mapContainer = d3.select("#map")
 
-const margin = { top: 130, right: 0, bottom: 80, left: 10 },
-    height = 500 - margin.top - margin.bottom;
+const margin = { top: 150, right: 0, bottom: 80, left: 10 },
+    height = 600 - margin.top - margin.bottom;
 
-const width = 950
+const width = 1000
 // const width = mapContainer.node().getBoundingClientRect().width - - margin.left - margin.right;
 // const width_map = 600
 
@@ -30,8 +30,9 @@ export function drawMap() {
     svg_map.append("text")
         .text("Water scarcity conditions (WEI+)")
         .attr("x", 15)
-        .attr("y", -90)
-        .attr("font-size", "20px")
+        .attr("y", -97)
+        .attr("font-size", "1.5em")
+        .attr("font-weight", "bold")
 
     colorScale = d3.scaleThreshold()
         .domain([0.01, 5, 10, 20, 40, 200])
@@ -67,7 +68,7 @@ export function drawMap() {
         .enter()
         .append("circle")
         .attr("cx", 40)
-        .attr("cy", function (d, i) { return 240 + i * 25 }) // 100 is where the first dot appears. 25 is the distance between dots
+        .attr("cy", function (d, i) { return 280 + i * 25 }) // 100 is where the first dot appears. 25 is the distance between dots
         .attr("r", 7)
         .style("fill", function (d) { 
             if(d[0] == '<')
@@ -84,7 +85,7 @@ export function drawMap() {
         .enter()
         .append("text")
         .attr("x", 60)
-        .attr("y", function (d, i) { return 240 + i * 25 }) // 100 is where the first dot appears. 25 is the distance between dots
+        .attr("y", function (d, i) { return 280 + i * 25 }) // 100 is where the first dot appears. 25 is the distance between dots
         .style("fill", function (d) { 
             if(d[0] == '<')
                 return colorScale(0.01)
@@ -165,7 +166,7 @@ export function drawMap() {
                     .projection(projection)
                 )
                 .style("stroke", "transparent")
-                .attr("class", function (d) { return "Country" })
+                .attr("class", "Country" )
                 .style("opacity", 1)
                 .on("mouseover", mouseOver)
                 .on("mousemove", mouseMove)
