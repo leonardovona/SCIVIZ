@@ -2,36 +2,33 @@
 var x_axis, y, subgroups, groups, pollutants_data, bars, color;
 
 // set the dimensions and margins of the graph
-const margin_sb = { top: 30, right: 0, bottom: 40, left: 80 },
-    height_sb = 500 - margin_sb.top - margin_sb.bottom;
+const margin = { top: 20, right: 0, bottom: 40, left: 80 },
+    height = 320 - margin.top - margin.bottom;
 
 const stackedBarChartContainer = d3.select("#stackedBarChart")
-const width_sb = stackedBarChartContainer.node().getBoundingClientRect().width - margin_sb.left - margin_sb.right
+const width = stackedBarChartContainer.node().getBoundingClientRect().width - margin.left - margin.right
 
 export function drawStackedBarChart() {
 
-
-
     // append the svg object to the body of the page
     const svg_sb = stackedBarChartContainer
-        .classed("svg-container", true)
         .append("svg")
         .attr(
             "viewBox",
-            `-${margin_sb.left} -${margin_sb.top} ${width_sb + margin_sb.left + margin_sb.right} ${height_sb + margin_sb.top + margin_sb.bottom}`
+            `-${margin.left} -${margin.top} ${width + margin.left + margin.right} ${height + margin.top + margin.bottom}`
         )
         .attr("preserveAspectRatio", "xMinYMin meet")
-        // .classed("svg-content-responsive", true)
-        .attr("height", "100%")
+        .classed("svg-content", true)
+        // .attr("width", "84%")
         .append("g")
 
     // Add X axis
     x_axis = svg_sb.append("g")
-        .attr("transform", "translate(0," + height_sb + ")")
+        .attr("transform", "translate(0," + height + ")")
 
     y = d3.scaleLinear()
         .domain([0, 190000000])
-        .range([height_sb, 0]);
+        .range([height, 0]);
 
     // Not sure if goes here
     svg_sb.append("g")
@@ -59,6 +56,43 @@ export function drawStackedBarChart() {
         color = d3.scaleOrdinal()
             .domain(subgroups)
             .range(['#e41a1c', '#377eb8', '#4daf4a', '#834aaf'])
+
+        // var keys = ["0 - 5", "5 - 10", "10 - 20", "20 - 40", "40 - 200"]
+
+        // Usually you have a color scale in your chart already
+
+        const svg_legend = d3.select("#stackedBarLegend")
+            .append('svg')
+            .attr(
+                "viewBox",
+                `-20 -20 350 350`
+            )
+            .attr("preserveAspectRatio", "xMinYMin meet")
+            .classed("svg-content", true)
+            .append("g")
+
+        // Add one dot in the legend for each name.
+        svg_legend.selectAll("mydots")
+            .data(subgroups)
+            .enter()
+            .append("circle")
+            .attr("cx", 10)
+            .attr("cy", function (d, i) { return 20 + i * 40 }) // 100 is where the first dot appears. 25 is the distance between dots
+            .attr("r", 10)
+            .style("fill", function (d) { return color(d) })
+
+
+        // Add one dot in the legend for each name.
+        svg_legend.selectAll("mylabels")
+            .data(subgroups)
+            .enter()
+            .append("text")
+            .attr("x", 30)
+            .attr("y", function (d, i) { return 20 + i * 40 }) // 100 is where the first dot appears. 25 is the distance between dots
+            .style("fill", function (d) { return color(d) })
+            .text(function (d) { return d })
+            .attr("text-anchor", "left")
+            .style("alignment-baseline", "middle")
 
         // console.log(stackedData)
         updateStackedBarChart()
@@ -97,7 +131,7 @@ export function updateStackedBarChart({ pollutant = "Total", year = "2019" } = {
 
     const x = d3.scaleBand()
         .domain(groups)
-        .range([0, width_sb])
+        .range([0, width])
         .padding([0.2])
 
     x_axis

@@ -1,9 +1,13 @@
 import { EU_members, click } from "./main.js"
 
 const mapContainer = d3.select("#map")
-const width_map = mapContainer.node().getBoundingClientRect().width
+
+const margin = { top: 130, right: 0, bottom: 80, left: 10 },
+    height = 500 - margin.top - margin.bottom;
+
+const width = 950
+// const width = mapContainer.node().getBoundingClientRect().width - - margin.left - margin.right;
 // const width_map = 600
-const height_map = 550
 
 var data = new Map()
 
@@ -14,34 +18,83 @@ export function drawMap() {
         .append("svg")
         .attr(
             "viewBox",
-            `0 0 ${width_map} ${height_map}`
+            // '0 0 100 100'
+            `-${margin.left} -${margin.top} ${width + margin.left + margin.right} ${height + margin.top + margin.bottom}`
         )
-        .attr("height", "100%")
+        // .attr("height", "100%")
+        // .attr("width", "70%")
         // .attr("preserveAspectRatio", "none")
         .attr("preserveAspectRatio", "xMinYMin meet")
     // .classed("svg-content-responsive", true)
-    
+
     svg_map.append("text")
         .text("Water scarcity conditions (WEI+)")
         .attr("x", 15)
-        .attr("y", 30)
+        .attr("y", -90)
         .attr("font-size", "20px")
 
     colorScale = d3.scaleThreshold()
-        .domain([0.01, 1, 2, 4, 8, 16, 32])
-        .range(d3.schemeReds[7]);
+        .domain([0.01, 5, 10, 20, 40, 200])
+        .range(d3.schemeReds[6]);
 
-    
+
     // Create a function that takes a dataset as input and update the plot:
 
     // Map and projection
     path = d3.geoPath();
     projection = d3.geoMercator()
         .scale(420)
-        .center([13, 55])
-        .translate([width_map / 2, height_map / 2]);
+        .center([10, 55])
+        .translate([width / 2, height / 2]);
 
     // Data and color scale
+
+    // var legend = d3.legendColor()
+    //     .scale(colorScale);
+
+    // svg_map.append("g")
+    //     .attr("transform", "translate(40,350)")
+    //     .call(legend);
+
+    // create a list of keys
+    var keys = ["< 5%", "5 - 10%", "10 - 20%", "20 - 40%", "> 40%"]
+
+    // Usually you have a color scale in your chart already
+
+    // Add one dot in the legend for each name.
+    svg_map.selectAll("mydots")
+        .data(keys)
+        .enter()
+        .append("circle")
+        .attr("cx", 40)
+        .attr("cy", function (d, i) { return 240 + i * 25 }) // 100 is where the first dot appears. 25 is the distance between dots
+        .attr("r", 7)
+        .style("fill", function (d) { 
+            if(d[0] == '<')
+                return colorScale(0.01)
+            if(d[0] == '>')
+                return colorScale(50)
+            return colorScale(parseInt(d.slice(0,2)) + 0.1) 
+        })
+        
+
+    // Add one dot in the legend for each name.
+    svg_map.selectAll("mylabels")
+        .data(keys)
+        .enter()
+        .append("text")
+        .attr("x", 60)
+        .attr("y", function (d, i) { return 240 + i * 25 }) // 100 is where the first dot appears. 25 is the distance between dots
+        .style("fill", function (d) { 
+            if(d[0] == '<')
+                return colorScale(0.01)
+            if(d[0] == '>')
+                return colorScale(50)
+            return colorScale(parseInt(d.slice(0,2)) + 0.1) 
+        })
+        .text(function (d) { return d })
+        .attr("text-anchor", "left")
+        .style("alignment-baseline", "middle")
 
 
     tooltip = d3.select("#map")

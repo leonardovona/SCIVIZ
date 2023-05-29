@@ -1,7 +1,7 @@
 // set the dimensions and margins of the graph
-const margin = { top: 20, right: 30, bottom: 20, left: 100 },
-    width = 760 - margin.left - margin.right,
-    height = 400 - margin.top - margin.bottom;
+const margin = { top: 10, right: 50, bottom: 60, left: 50 },
+    width = 600 - margin.left - margin.right,
+    height = 340 - margin.top - margin.bottom;
 
 var svg, abstractionData, y, color, x, xSubgroup, subgroups, yAxis;
 
@@ -9,11 +9,15 @@ export function drawGroupedBarChart() {
     // append the svg object to the body of the page
     svg = d3.select("#groupedBarChart")
         .append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
+        .attr(
+            "viewBox",
+            `-${margin.left} -${margin.top} ${width + margin.left + margin.right} ${height + margin.top + margin.bottom}`
+        )
+        // .attr("width", "82%")
+        .attr("preserveAspectRatio", "xMinYMin meet")
+        .classed("svg-content", true)
         .append("g")
-        .attr("transform",
-            "translate(" + margin.left + "," + margin.top + ")");
+        .attr("transform", `translate(${margin.left},${margin.top})`);
 
     // Parse the Data
     d3.csv("./resources/water_abstraction.csv").then(function (data) {
@@ -52,7 +56,7 @@ export function drawGroupedBarChart() {
             .attr("class", "x label")
             .attr("text-anchor", "end")
             .attr("x", width)
-            .attr("y", height + 18)
+            .attr("y", height - 10)
             .text("Year");
 
         // color palette = one color per subgroup
@@ -79,6 +83,44 @@ export function drawGroupedBarChart() {
             .attr("dy", ".15em")
             // .attr("transform", "rotate(-90)")
             .text("Million m³");
+
+        // const subgroups = ['Nitrogen', 'Phosphorus', 'TOC', 'Heavy metals (Cd, Hg, Ni, Pb)']
+
+        // color = d3.scaleOrdinal()
+        //     .domain(subgroups)
+        //     .range(['#e41a1c', '#377eb8', '#4daf4a', '#834aaf'])
+
+        const svg_legend = d3.select("#groupedBarLegend")
+            .append('svg')
+            .attr(
+                "viewBox",
+                `-20 -20 350 350`
+            )
+            .attr("preserveAspectRatio", "xMinYMin meet")
+            .classed("svg-content", true)
+            .append("g")
+
+        // Add one dot in the legend for each name.
+        svg_legend.selectAll("mydots")
+            .data(subgroups)
+            .enter()
+            .append("circle")
+            .attr("cy", function (d, i) { return 20 + i * 40 }) // 100 is where the first dot appears. 25 is the distance between dots
+            .attr("r", 10)
+            .style("fill", function (d) { return color(d) })
+
+
+        // Add one dot in the legend for each name.
+        svg_legend.selectAll("mylabels")
+            .data(subgroups)
+            .enter()
+            .append("text")
+            .attr("x", 20)
+            .attr("y", function (d, i) { return 20 + i * 40 }) // 100 is where the first dot appears. 25 is the distance between dots
+            .style("fill", function (d) { return color(d) })
+            .text(function (d) { return d })
+            .attr("text-anchor", "left")
+            .style("alignment-baseline", "middle")
 
         updateGroupedBarChart()
     })

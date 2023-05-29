@@ -1,30 +1,28 @@
 // set the dimensions and margins of the graph
-const margin_line = { top: 15, right:40, bottom: 50, left: 40 },
+const margin = { top: 15, right: 40, bottom: 35, left: 40 },
     // width_line = 550 ,
-    height_line = 400 - margin_line.top - margin_line.bottom;
+    height = 300 - margin.top - margin.bottom;
 
 const lineChartContainer = d3.select("#lineChart")
-const width_line = lineChartContainer.node().getBoundingClientRect().width - margin_line.left - margin_line.right
+const width = lineChartContainer.node().getBoundingClientRect().width - margin.left - margin.right
 
 var line_data;
 var x_line, y_line, yAxis;
-var svg_line
+var svg_line, color
 
 export function drawLineChart() {
-
-
     // append the svg object to the body of the page
     svg_line = lineChartContainer
         .append("svg")
         .attr(
             "viewBox",
-            `-${margin_line.left} -${margin_line.top} ${width_line + margin_line.left + margin_line.right} ${height_line + margin_line.top + margin_line.bottom}`
+            `-${margin.left} -${margin.top} ${width + margin.left + margin.right} ${height + margin.top + margin.bottom}`
         )
-        .attr("height", "100%")
-        // .attr("preserveAspectRatio", "xMinYMin meet")
-        // .classed("svg-content-responsive", true)
+        .attr("preserveAspectRatio", "xMinYMin meet")
+        .classed("svg-content", true)
         .append("g")
-        .attr("transform", `translate(${margin_line.left},${margin_line.top})`);
+        // .attr("height", "10%")
+        .attr("transform", `translate(${margin.left},${margin.top})`);
 
     //Read the data
     d3.csv("./resources/water_pollutants.csv",
@@ -61,17 +59,17 @@ export function drawLineChart() {
             // Add X axis --> it is a date format
             x_line = d3.scaleTime()
                 .domain(d3.extent(line_data, function (d) { return d.reportingYear; }))
-                .range([0, (width_line - margin_line.right)]);
+                .range([0, (width - margin.right)]);
 
             svg_line.append("g")
-                .attr("transform", `translate(0, ${height_line})`)
+                .attr("transform", `translate(0, ${height})`)
                 .call(d3.axisBottom(x_line));
 
             svg_line.append("text")
                 .attr("class", "x label")
                 .attr("text-anchor", "end")
-                .attr("x", width_line)
-                .attr("y", height_line)
+                .attr("x", width)
+                .attr("y", height)
                 .text("Year");
 
 
@@ -79,7 +77,7 @@ export function drawLineChart() {
             y_line = d3.scaleLinear()
                 .domain([0, 550000000])
                 //.domain([0, d3.max(data, function (d) { return +d['TOC']; })])
-                .range([height_line, 0]);
+                .range([height, 0]);
 
             yAxis = d3.axisLeft(y_line);
 
@@ -95,6 +93,53 @@ export function drawLineChart() {
                 .attr("dy", "-.30em")
                 // .attr("transform", "rotate(-90)")
                 .text("kg");
+
+            const subgroups = ['Nitrogen', 'Phosphorus', 'TOC', 'Heavy metals (Cd, Hg, Ni, Pb)']
+
+            color = d3.scaleOrdinal()
+                .domain(subgroups)
+                .range(['#e41a1c', '#377eb8', '#4daf4a', '#834aaf'])
+
+            const svg_legend = d3.select("#lineLegend")
+                .append('svg')
+                .attr(
+                    "viewBox",
+                    `-20 -20 350 350`
+                )
+                .attr("preserveAspectRatio", "xMinYMin meet")
+                .classed("svg-content", true)
+                .append("g")
+                // .append('svg')
+                // .attr(
+                //     "viewBox",
+                //     `-${margin.left} -${margin.top} ${width + margin.left + margin.right} ${height + margin.top + margin.bottom}`
+                // )
+                // .attr("preserveAspectRatio", "xMinYMin meet")
+                // // .classed("svg-content-responsive", true)
+                // .attr("height", "100%")
+                // .append("g")
+
+            // Add one dot in the legend for each name.
+            svg_legend.selectAll("mydots")
+                .data(subgroups)
+                .enter()
+                .append("circle")
+                .attr("cy", function (d, i) { return 20 + i * 40 }) // 100 is where the first dot appears. 25 is the distance between dots
+                .attr("r", 10)
+                .style("fill", function (d) { return color(d) })
+
+
+            // Add one dot in the legend for each name.
+            svg_legend.selectAll("mylabels")
+                .data(subgroups)
+                .enter()
+                .append("text")
+                .attr("x", 20)
+                .attr("y", function (d, i) { return 20 + i * 40 }) // 100 is where the first dot appears. 25 is the distance between dots
+                .style("fill", function (d) { return color(d) })
+                .text(function (d) { return d })
+                .attr("text-anchor", "left")
+                .style("alignment-baseline", "middle")
 
             // var res = line_data.map(function (d) { console.log(d); return d.key }) // list of group names
             // var color = d3.scaleOrdinal()
