@@ -13,7 +13,6 @@ export function drawGroupedBarChart() {
             "viewBox",
             `-${margin.left} -${margin.top} ${width + margin.left + margin.right} ${height + margin.top + margin.bottom}`
         )
-        // .attr("width", "82%")
         .attr("preserveAspectRatio", "xMinYMin meet")
         .classed("svg-content", true)
         .append("g")
@@ -21,7 +20,6 @@ export function drawGroupedBarChart() {
 
     // Parse the Data
     d3.csv("./resources/water_abstraction.csv").then(function (data) {
-        // List of subgroups = header of the csv files = soil condition here
         subgroups = data.columns.slice(2)
 
         abstractionData = data.filter(function (d) {
@@ -33,7 +31,6 @@ export function drawGroupedBarChart() {
             }
         });
 
-        // List of groups = species here = value of the first column called group -> I show them on the X axis
         var groups = d3.map(abstractionData, function (d) { return (d.year) })
 
         // Add X axis
@@ -46,7 +43,6 @@ export function drawGroupedBarChart() {
             .attr("transform", "translate(0," + height + ")")
             .call(d3.axisBottom(x).tickSize(0));
 
-        // Another scale for subgroup position?
         xSubgroup = d3.scaleBand()
             .domain(subgroups)
             .range([0, x.bandwidth()])
@@ -60,12 +56,10 @@ export function drawGroupedBarChart() {
             .attr("y", height - 10)
             .text("Year");
 
-        // color palette = one color per subgroup
         color = d3.scaleOrdinal()
             .domain(subgroups)
             .range(d3.schemeCategory10)
 
-        // Add Y axis
         y = d3.scaleLinear()
             .domain([0, 90000])
             .range([height, 0]);
@@ -73,7 +67,6 @@ export function drawGroupedBarChart() {
         yAxis = d3.axisLeft(y);
 
         svg.append("g")
-            // .call(d3.axisLeft(y));
             .attr("class", "y-axis");
 
         svg.append("text")
@@ -83,14 +76,7 @@ export function drawGroupedBarChart() {
             .attr("x", 0)
             .attr("y", -10)
             .attr("dy", ".15em")
-            // .attr("transform", "rotate(-90)")
             .text("Million m³");
-
-        // const subgroups = ['Nitrogen', 'Phosphorus', 'TOC', 'Heavy metals (Cd, Hg, Ni, Pb)']
-
-        // color = d3.scaleOrdinal()
-        //     .domain(subgroups)
-        //     .range(['#e41a1c', '#377eb8', '#4daf4a', '#834aaf'])
 
         const svg_legend = d3.select("#groupedBarLegend")
             .append('svg')
@@ -102,23 +88,20 @@ export function drawGroupedBarChart() {
             .classed("svg-content", true)
             .append("g")
 
-        // Add one dot in the legend for each name.
         svg_legend.selectAll("mydots")
             .data(subgroups)
             .enter()
             .append("circle")
-            .attr("cy", function (d, i) { return 20 + i * 40 }) // 100 is where the first dot appears. 25 is the distance between dots
+            .attr("cy", function (d, i) { return 20 + i * 40 })
             .attr("r", 10)
             .style("fill", function (d) { return color(d) })
 
-
-        // Add one dot in the legend for each name.
         svg_legend.selectAll("mylabels")
             .data(subgroups)
             .enter()
             .append("text")
             .attr("x", 20)
-            .attr("y", function (d, i) { return 20 + i * 40 }) // 100 is where the first dot appears. 25 is the distance between dots
+            .attr("y", function (d, i) { return 20 + i * 40 })
             .style("fill", function (d) { return color(d) })
             .text(function (d) { return d })
             .attr("text-anchor", "left")
@@ -151,6 +134,7 @@ export function updateGroupedBarChart({ country = "EU" } = {}) {
         .call(yAxis);
 
     var barGroups = svg.selectAll("g.layer").data(data);
+    
     barGroups.enter().append("g").classed('layer', true)
         .attr("transform", function (d) { return "translate(" + x(d.year) + ",0)"; });
 

@@ -35,19 +35,7 @@ export function click(d) {
                 .style("opacity", 1)
                 .style("stroke", "black")
             selectedCountry = d.srcElement
-        }
-
-        // d3.selectAll(".Country")
-        //     .transition()
-        //     .duration(200)
-        //     .style("opacity", 0.5)
-        //     .style("stroke", "transparent")
-        // d3.select(d.srcElement)
-        //     .transition()
-        //     .duration(200)
-        //     .style("opacity", 1)
-        //     .style("stroke", "black")
-        
+        }       
     }
 }
 

@@ -8,30 +8,28 @@
 
     <link rel="stylesheet" href="./css/style.css">
 
-    <script type="module">
-        import { updateStackedBarChart } from './js/stackedBarChart.js';
-        window.updateStackedBarChart = updateStackedBarChart;
-    </script>
-</head>
-
-<body style=>
-
     <!-- Load d3.js -->
     <script src="https://d3js.org/d3.v6.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.25.6/d3-legend.min.js"></script>
 
-    <div class="container" style="height: 57%; width:100%;">
-        <div class="container" style="height: 85.7%; width:50%; flex-flow: column;">
-            <div class="item" style="height:93%">
-                <div id="map">
-                </div>
+    <script type="module">
+        import { updateStackedBarChart } from './js/stackedBarChart.js';
+        window.updateStackedBarChart = updateStackedBarChart;
+    </script>
+
+    <script type="module" src="./js/main.js"></script>
+</head>
+
+<body>
+    <div class="container" id="firstRowContainer">
+        <div class="container column-container">
+            <div class="item" id="mapItem">
+                <div id="map"></div>
             </div>
-            <div class="item" style="height:7%;">
-                <p style="margin-top: 0.7vh; margin-right:1.5vw; margin-left: 0.5vw;">Selected year: <output id="year"
-                        style="font-weight: bold;">2019</output></p>
-                <div class="range" style="width:78%; margin-top:0.3vh">
-                    <input style="width:100%;" type="range" min="2007" max="2019" steps="1" value="2019" id="year_input"
-                        list="steplist">
+            <div class="item thin">
+                <p class="outputP"> Selected year: <output id="year">2019</output> </p>
+                <div class="range" id="rangeDiv">
+                    <input type="range" min="2007" max="2019" steps="1" value="2019" id="year_input" list="steplist">
                     <datalist id="steplist">
                         <option value="2007" label="2007"></option>
                         <option value="2008" label="2008"></option>
@@ -48,33 +46,27 @@
                         <option value="2019" label="2019"></option>
                     </datalist>
                 </div>
-                <!-- !!! This need to be fixed, it resets the year -->
             </div>
         </div>
-        <div class="container" style="height: 100%; width:50%; flex-flow:column">
-            <div class="item" style="height:7%;">
-                <p style="margin-top: 1vh; padding-right: 2vh; padding-left:1vh">Selected country: <output id="country"
-                        style="font-weight: bold;">EU</output></p>
+        <div class="container column-container">
+            <div class="item thin">
+                <p class="outputP">Selected country: <output id="country">EU</output></p>
             </div>
-            <div class="item" style="height: 93%; display:block;">
-                <p style="font-size:1.2em; font-weight: bold; margin-left:1.5vh">
-                    Water abstraction by economic sector
-                </p>
+            <div class="item" id="groupedBarItem">
+                <p id="groupedBarTitle">Water abstraction by economic sector</p>
                 <div id="groupedBarChart"></div>
                 <div id="groupedBarLegend"></div>
             </div>
         </div>
     </div>
-    <div class="container" style="height: 7%;">
-        <div class="item" style="display: block;">
-            <p style="text-align:center; font-size:1.5em; margin-top: 0; font-weight: bold;">
-                Industrial pollutant releases to water
-            </p>
+    <div class="container thin">
+        <div class="item" id="secondRowItem">
+            <p id="secondRowP">Industrial pollutant releases to water</p>
         </div>
     </div>
 
-    <div class="container" style="height: 36%;">
-        <div class="item" style="width: 50%;">
+    <div class="container" id="thirdRowContainer">
+        <div class="item" id="stackedBarItem">
             <div id="stackedBarChart"></div>
             <div id="stackedBarLegend"></div>
             <div>
@@ -83,10 +75,8 @@
                 </button>
             </div>
         </div>
-        <div class="item" style="width: 50%;">
+        <div class="item" id="lineItem">
             <div id="lineChart"></div>
             <div id="lineLegend"></div>
         </div>
-
-        <script type="module" src="./js/main.js"></script>
 </body>

@@ -1,14 +1,3 @@
-/* html,
-body {
-  height: 100%;
-  padding: 0;
-  margin: 0;
-} */
-
-/* .grid-container {
-  display: grid;
-} */
-
 html,
 body {
   margin: 0;
@@ -27,14 +16,82 @@ body {
   display: flex;
 }
 
+#firstRowContainer {
+  height: 57%;
+}
+
+.column-container {
+  width: 50%;
+  flex-flow: column;
+}
+
+#thirdRowContainer {
+  height: 36%;
+}
+
+#mapItem {
+  height: 93%;
+}
+
+.thin {
+  height: 7%;
+}
+
+#groupedBarItem {
+  height: 93%;
+  display: block;
+}
+
+#secondRowItem {
+  display: block;
+}
+
+#stackedBarItem {
+  width: 50%;
+}
+
+#lineItem {
+  width: 50%;
+}
+
+.outputP {
+  margin-top: 0.8vh;
+  margin-right: 1.5vw;
+  padding-left: 0.5vw;
+}
+
+#groupedBarTitle {
+  font-size: 1.2em;
+  font-weight: bold;
+  margin-left: 1.5vh;
+}
+
+#secondRowP {
+  text-align: center;
+  font-size: 1.5em;
+  margin-top: 0;
+  font-weight: bold;
+}
+
+output {
+  font-weight: bold;
+}
+
+#rangeDiv {
+  width: 78%;
+  margin-top: 0.3vh
+}
+
+#year_input {
+  width: 100%
+}
+
 .item {
   display: flex;
   position: relative;
   flex-grow: 1;
   margin: 1vh;
   padding: 1vh;
-  /* width: 46%;
-  height: 46%; */
   border-radius: 5px;
   background-color: white;
 }
@@ -47,9 +104,6 @@ body {
 #groupedBarChart {
   display: inline-block;
   position: relative;
-  padding-bottom: 8%;
-  vertical-align: top;
-  overflow: hidden;
   width: 69%;
   height: 70%;
 }
@@ -57,19 +111,13 @@ body {
 #groupedBarLegend {
   display: inline-block;
   position: relative;
-  /* padding-bottom: 40%; */
   vertical-align: top;
-  overflow: hidden;
   width: 30%;
-  height: 100%;
 }
 
 #stackedBarChart {
   display: inline-block;
   position: relative;
-  /* padding-bottom: 40%; */
-  vertical-align: top;
-  overflow: hidden;
   width: 65%;
   height: 100%;
 }
@@ -77,9 +125,7 @@ body {
 #stackedBarLegend {
   display: inline-block;
   position: relative;
-  /* padding-bottom: 40%; */
   vertical-align: top;
-  overflow: hidden;
   width: 25%;
   height: 100%;
 }
@@ -87,9 +133,6 @@ body {
 #lineChart {
   display: inline-block;
   position: relative;
-  padding-bottom: 40%;
-  vertical-align: top;
-  overflow: hidden;
   width: 70%;
   height: 100%;
 }
@@ -98,13 +141,8 @@ body {
   display: inline-block;
   position: relative;
   vertical-align: top;
-  overflow: hidden;
   width: 30%;
   height: 100%;
-}
-
-input[type="range"] {
-  width: 100vh;
 }
 
 div.tooltip {
@@ -124,17 +162,6 @@ div.tooltip {
   top: 0;
   left: 0;
 }
-
-/* datalist {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  width: 200px;
-}
-
-option {
-  padding-right: 23px;
-} */
 
 button {
   background-color: #008CBA;

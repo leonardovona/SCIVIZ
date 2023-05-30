@@ -1,45 +1,34 @@
 import { EU_members, click, selectedCountry } from "./main.js"
 
-const mapContainer = d3.select("#map")
-
 const margin = { top: 80, right: 0, bottom: 80, left: 10 },
     height = 600 - margin.top - margin.bottom;
 
 const width = 1200
-// const width = mapContainer.node().getBoundingClientRect().width - - margin.left - margin.right;
-// const width_map = 600
 
 var data = new Map()
 
-var colorScale, svg_map, path, projection, tooltip
+var color, svg, path, projection, tooltip
 
 export function drawMap() {
-    svg_map = d3.select("#map")
+    svg = d3.select("#map")
         .append("svg")
         .attr(
             "viewBox",
-            // '0 0 100 100'
             `-${margin.left} -${margin.top} ${width + margin.left + margin.right} ${height + margin.top + margin.bottom}`
         )
-        // .attr("height", "100%")
-        // .attr("width", "70%")
-        // .attr("preserveAspectRatio", "none")
         .attr("preserveAspectRatio", "xMinYMin meet")
-    // .classed("svg-content-responsive", true)
+        .classed("svg-content", true)
 
-    svg_map.append("text")
+    svg.append("text")
         .text("Water scarcity conditions (WEI+)")
         .attr("x", 15)
         .attr("y", -30)
         .attr("font-size", "1.5em")
         .attr("font-weight", "bold")
 
-    colorScale = d3.scaleThreshold()
+    color = d3.scaleThreshold()
         .domain([0.01, 5, 10, 20, 40, 200])
         .range(d3.schemeReds[6]);
-
-
-    // Create a function that takes a dataset as input and update the plot:
 
     // Map and projection
     path = d3.geoPath();
@@ -48,55 +37,39 @@ export function drawMap() {
         .center([10, 55])
         .translate([width / 2, height / 2]);
 
-    // Data and color scale
-
-    // var legend = d3.legendColor()
-    //     .scale(colorScale);
-
-    // svg_map.append("g")
-    //     .attr("transform", "translate(40,350)")
-    //     .call(legend);
-
-    // create a list of keys
     var keys = ["< 5%", "5 - 10%", "10 - 20%", "20 - 40%", "> 40%"]
 
-    // Usually you have a color scale in your chart already
-
-    // Add one dot in the legend for each name.
-    svg_map.selectAll("mydots")
+    svg.selectAll("mydots")
         .data(keys)
         .enter()
         .append("circle")
         .attr("cx", 40)
-        .attr("cy", function (d, i) { return 320 + i * 25 }) // 100 is where the first dot appears. 25 is the distance between dots
+        .attr("cy", function (d, i) { return 320 + i * 25 })
         .attr("r", 7)
         .style("fill", function (d) {
             if (d[0] == '<')
-                return colorScale(0.01)
+                return color(0.01)
             if (d[0] == '>')
-                return colorScale(50)
-            return colorScale(parseInt(d.slice(0, 2)) + 0.1)
+                return color(50)
+            return color(parseInt(d.slice(0, 2)) + 0.1)
         })
 
-
-    // Add one dot in the legend for each name.
-    svg_map.selectAll("mylabels")
+    svg.selectAll("mylabels")
         .data(keys)
         .enter()
         .append("text")
         .attr("x", 60)
-        .attr("y", function (d, i) { return 320 + i * 25 }) // 100 is where the first dot appears. 25 is the distance between dots
+        .attr("y", function (d, i) { return 320 + i * 25 })
         .style("fill", function (d) {
             if (d[0] == '<')
-                return colorScale(0.01)
+                return color(0.01)
             if (d[0] == '>')
-                return colorScale(50)
-            return colorScale(parseInt(d.slice(0, 2)) + 0.1)
+                return color(50)
+            return color(parseInt(d.slice(0, 2)) + 0.1)
         })
         .text(function (d) { return d })
         .attr("text-anchor", "left")
         .style("alignment-baseline", "middle")
-
 
     tooltip = d3.select("#map")
         .append("div")
@@ -144,12 +117,10 @@ export function drawMap() {
 
             let mouseMove = function (d) {
                 if (EU_members.includes(d.srcElement.__data__.properties.ID)) {
-                    // if (selectedCountry == null) {
                     tooltip
                         .html(d.srcElement.__data__.properties.NAME + ": " + d.srcElement.__data__.total)
                         .style("left", (d.clientX + 20) + "px")
                         .style("top", (d.clientY) + "px")
-                    // }
                 }
             }
 
@@ -180,7 +151,7 @@ export function drawMap() {
             }
 
             // Draw the map
-            svg_map.append("g")
+            svg.append("g")
                 .selectAll("path")
                 .data(topo.features)
                 .enter()
@@ -214,6 +185,6 @@ export function updateMap(year) {
             } else {
                 d.total = 0
             }
-            return colorScale(d.total);
+            return color(d.total);
         })
 }
