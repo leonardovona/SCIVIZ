@@ -98,7 +98,7 @@ export function drawLineChart() {
 
             color = d3.scaleOrdinal()
                 .domain(subgroups)
-                .range(['#e41a1c', '#377eb8', '#4daf4a', '#834aaf'])
+                .range(d3.schemeCategory10)
 
             const svg_legend = d3.select("#lineLegend")
                 .append('svg')
@@ -224,7 +224,7 @@ export function updateLineChart({ country = "EU" } = {}) {
             .x(function (d) { return x_line(d.reportingYear); })
             .y(function (d) { return y_line(d.Nitrogen); }))
         .attr("fill", "none")
-        .attr("stroke", "#e41a1c")
+        .attr("stroke", color('Nitrogen'))
         .attr("stroke-width", 2.5)
 
     u_p
@@ -236,7 +236,7 @@ export function updateLineChart({ country = "EU" } = {}) {
             .x(function (d) { return x_line(d.reportingYear); })
             .y(function (d) { return y_line(d.Phosphorus); }))
         .attr("fill", "none")
-        .attr("stroke", "#377eb8")
+        .attr("stroke", color('Phosphorus'))
         .attr("stroke-width", 2.5)
 
     u_t
@@ -248,7 +248,7 @@ export function updateLineChart({ country = "EU" } = {}) {
             .x(function (d) { return x_line(d.reportingYear); })
             .y(function (d) { return y_line(d.TOC); }))
         .attr("fill", "none")
-        .attr("stroke", "#4daf4a")
+        .attr("stroke", color('TOC'))
         .attr("stroke-width", 2.5)
 
     u_h
@@ -260,7 +260,7 @@ export function updateLineChart({ country = "EU" } = {}) {
             .x(function (d) { return x_line(d.reportingYear); })
             .y(function (d) { return y_line(d['Heavy metals (Cd, Hg, Ni, Pb)']); }))
         .attr("fill", "none")
-        .attr("stroke", "#834aaf")
+        .attr("stroke", color('heavy metals (Cd, Hg, Ni, Pb)'))
         .attr("stroke-width", 2.5)
 
     /*

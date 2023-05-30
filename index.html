@@ -27,9 +27,9 @@
                 </div>
             </div>
             <div class="item" style="height:7%;">
-                <p style="margin-top: 1vh; margin-right:1.5vw;">Selected year: <output id="year"
+                <p style="margin-top: 0.7vh; margin-right:1.5vw; margin-left: 0.5vw;">Selected year: <output id="year"
                         style="font-weight: bold;">2019</output></p>
-                <div class="range" style="width:78%; margin-top:0.5vh">
+                <div class="range" style="width:78%; margin-top:0.3vh">
                     <input style="width:100%;" type="range" min="2007" max="2019" steps="1" value="2019" id="year_input"
                         list="steplist">
                     <datalist id="steplist">
@@ -78,8 +78,9 @@
             <div id="stackedBarChart"></div>
             <div id="stackedBarLegend"></div>
             <div>
-                <button
-                    onclick="updateStackedBarChart({year: document.querySelector('#year_input').value})">Reset order</button>
+                <button onclick="updateStackedBarChart({year: document.querySelector('#year_input').value})">
+                    Reset order
+                </button>
             </div>
         </div>
         <div class="item" style="width: 50%;">

@@ -135,3 +135,20 @@ div.tooltip {
 option {
   padding-right: 23px;
 } */
+
+button {
+  background-color: #008CBA;
+  border: none;
+  color: white;
+  padding: 7px 12px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 12px;
+  border-radius: 5px;
+}
+
+button:hover {
+  background-color: #006CBA;
+  cursor: pointer;
+}

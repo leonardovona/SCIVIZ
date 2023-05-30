@@ -55,7 +55,8 @@ export function drawStackedBarChart() {
         // color palette = one color per subgroup
         color = d3.scaleOrdinal()
             .domain(subgroups)
-            .range(['#e41a1c', '#377eb8', '#4daf4a', '#834aaf'])
+            .range(d3.schemeCategory10);
+            // .range(['#e41a1c', '#377eb8', '#4daf4a', '#834aaf'])
 
         // var keys = ["0 - 5", "5 - 10", "10 - 20", "20 - 40", "40 - 200"]
 
@@ -65,7 +66,7 @@ export function drawStackedBarChart() {
             .append('svg')
             .attr(
                 "viewBox",
-                `-20 -20 350 350`
+                `-20 -20 290 290`
             )
             .attr("preserveAspectRatio", "xMinYMin meet")
             .classed("svg-content", true)

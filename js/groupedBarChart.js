@@ -1,7 +1,7 @@
 // set the dimensions and margins of the graph
-const margin = { top: 10, right: 50, bottom: 60, left: 34 },
+const margin = { top: 10, right: 50, bottom: 60, left: 42.5 },
     width = 600 - margin.left - margin.right,
-    height = 330 - margin.top - margin.bottom;
+    height = 370 - margin.top - margin.bottom;
 
 var svg, abstractionData, y, color, x, xSubgroup, subgroups, yAxis;
 
@@ -55,7 +55,7 @@ export function drawGroupedBarChart() {
         svg.append("text")
             .attr("class", "x label")
             .attr("text-anchor", "end")
-            .attr("font-size", "0.8em")
+            .attr("font-size", "1em")
             .attr("x", width)
             .attr("y", height - 10)
             .text("Year");
@@ -63,7 +63,7 @@ export function drawGroupedBarChart() {
         // color palette = one color per subgroup
         color = d3.scaleOrdinal()
             .domain(subgroups)
-            .range(['#e41a1c', '#377eb8', '#4daf4a', '#834aaf', '#ff7f00', '#ffff33', '#a65628'])
+            .range(d3.schemeCategory10)
 
         // Add Y axis
         y = d3.scaleLinear()
@@ -79,7 +79,7 @@ export function drawGroupedBarChart() {
         svg.append("text")
             .attr("class", "y label")
             .attr("text-anchor", "end")
-            .attr("font-size", "0.8em")
+            .attr("font-size", "1em")
             .attr("x", 0)
             .attr("y", -10)
             .attr("dy", ".15em")
