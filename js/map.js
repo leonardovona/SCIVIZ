@@ -1,11 +1,11 @@
-import { EU_members, click } from "./main.js"
+import { EU_members, click, selectedCountry } from "./main.js"
 
 const mapContainer = d3.select("#map")
 
-const margin = { top: 150, right: 0, bottom: 80, left: 10 },
+const margin = { top: 80, right: 0, bottom: 80, left: 10 },
     height = 600 - margin.top - margin.bottom;
 
-const width = 1000
+const width = 1200
 // const width = mapContainer.node().getBoundingClientRect().width - - margin.left - margin.right;
 // const width_map = 600
 
@@ -30,7 +30,7 @@ export function drawMap() {
     svg_map.append("text")
         .text("Water scarcity conditions (WEI+)")
         .attr("x", 15)
-        .attr("y", -97)
+        .attr("y", -30)
         .attr("font-size", "1.5em")
         .attr("font-weight", "bold")
 
@@ -68,16 +68,16 @@ export function drawMap() {
         .enter()
         .append("circle")
         .attr("cx", 40)
-        .attr("cy", function (d, i) { return 280 + i * 25 }) // 100 is where the first dot appears. 25 is the distance between dots
+        .attr("cy", function (d, i) { return 320 + i * 25 }) // 100 is where the first dot appears. 25 is the distance between dots
         .attr("r", 7)
-        .style("fill", function (d) { 
-            if(d[0] == '<')
+        .style("fill", function (d) {
+            if (d[0] == '<')
                 return colorScale(0.01)
-            if(d[0] == '>')
+            if (d[0] == '>')
                 return colorScale(50)
-            return colorScale(parseInt(d.slice(0,2)) + 0.1) 
+            return colorScale(parseInt(d.slice(0, 2)) + 0.1)
         })
-        
+
 
     // Add one dot in the legend for each name.
     svg_map.selectAll("mylabels")
@@ -85,13 +85,13 @@ export function drawMap() {
         .enter()
         .append("text")
         .attr("x", 60)
-        .attr("y", function (d, i) { return 280 + i * 25 }) // 100 is where the first dot appears. 25 is the distance between dots
-        .style("fill", function (d) { 
-            if(d[0] == '<')
+        .attr("y", function (d, i) { return 320 + i * 25 }) // 100 is where the first dot appears. 25 is the distance between dots
+        .style("fill", function (d) {
+            if (d[0] == '<')
                 return colorScale(0.01)
-            if(d[0] == '>')
+            if (d[0] == '>')
                 return colorScale(50)
-            return colorScale(parseInt(d.slice(0,2)) + 0.1) 
+            return colorScale(parseInt(d.slice(0, 2)) + 0.1)
         })
         .text(function (d) { return d })
         .attr("text-anchor", "left")
@@ -122,6 +122,13 @@ export function drawMap() {
                         .duration(200)
                         .style("opacity", .5)
                         .style("stroke", "transparent")
+                    if (selectedCountry != null) {
+                        d3.select(selectedCountry)
+                            .transition()
+                            .duration(200)
+                            .style("opacity", 1)
+                            .style("stroke", "black")
+                    }
                     d3.select(this)
                         .transition()
                         .duration(200)
@@ -131,27 +138,44 @@ export function drawMap() {
                         .transition()
                         .duration(300)
                         .style("opacity", 1)
+
                 }
             }
 
             let mouseMove = function (d) {
                 if (EU_members.includes(d.srcElement.__data__.properties.ID)) {
+                    // if (selectedCountry == null) {
                     tooltip
                         .html(d.srcElement.__data__.properties.NAME + ": " + d.srcElement.__data__.total)
                         .style("left", (d.clientX + 20) + "px")
                         .style("top", (d.clientY) + "px")
+                    // }
                 }
             }
 
             let mouseLeave = function (d) {
                 if (EU_members.includes(d.srcElement.__data__.properties.ID)) {
-                    d3.selectAll(".Country")
-                        .transition()
-                        .duration(200)
-                        .style("opacity", 1)
-                        .style("stroke", "transparent")
+                    if (selectedCountry == null) {
+                        d3.selectAll(".Country")
+                            .transition()
+                            .duration(200)
+                            .style("opacity", 1)
+                            .style("stroke", "transparent")
+                    } else {
+                        d3.selectAll(".Country")
+                            .transition()
+                            .duration(200)
+                            .style("opacity", .5)
+                            .style("stroke", "transparent")
+                        d3.select(selectedCountry)
+                            .transition()
+                            .duration(200)
+                            .style("opacity", 1)
+                            .style("stroke", "black")
+                    }
                     tooltip.transition().duration(300)
                         .style("opacity", 0)
+
                 }
             }
 
@@ -166,7 +190,7 @@ export function drawMap() {
                     .projection(projection)
                 )
                 .style("stroke", "transparent")
-                .attr("class", "Country" )
+                .attr("class", "Country")
                 .style("opacity", 1)
                 .on("mouseover", mouseOver)
                 .on("mousemove", mouseMove)

@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="./css/style.css">
-    
+
     <script type="module">
         import { updateStackedBarChart } from './js/stackedBarChart.js';
         window.updateStackedBarChart = updateStackedBarChart;
@@ -20,45 +20,52 @@
     <script src="https://d3js.org/d3.v6.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.25.6/d3-legend.min.js"></script>
 
-    <div class="container" style="height: 50%;">
-        <div class="item">
-            <div id="map">
+    <div class="container" style="height: 57%; width:100%;">
+        <div class="container" style="height: 85.7%; width:50%; flex-flow: column;">
+            <div class="item" style="height:93%">
+                <div id="map">
+                </div>
+            </div>
+            <div class="item" style="height:7%;">
+                <p style="margin-top: 1vh; margin-right:1.5vw;">Selected year: <output id="year"
+                        style="font-weight: bold;">2019</output></p>
+                <div class="range" style="width:78%; margin-top:0.5vh">
+                    <input style="width:100%;" type="range" min="2007" max="2019" steps="1" value="2019" id="year_input"
+                        list="steplist">
+                    <datalist id="steplist">
+                        <option value="2007" label="2007"></option>
+                        <option value="2008" label="2008"></option>
+                        <option value="2009" label="2009"></option>
+                        <option value="2010" label="2010"></option>
+                        <option value="2011" label="2011"></option>
+                        <option value="2012" label="2012"></option>
+                        <option value="2013" label="2013"></option>
+                        <option value="2014" label="2014"></option>
+                        <option value="2015" label="2015"></option>
+                        <option value="2016" label="2016"></option>
+                        <option value="2017" label="2017"></option>
+                        <option value="2018" label="2018"></option>
+                        <option value="2019" label="2019"></option>
+                    </datalist>
+                </div>
+                <!-- !!! This need to be fixed, it resets the year -->
             </div>
         </div>
-        <div class="item" style="display:block;">
-            <p style="font-size:1.2em; font-weight: bold; margin-left:1.5vh">Water abstraction by economic sector</p>
-            <div id="groupedBarChart"></div>
-            <div id="groupedBarLegend"></div>
-        </div>
-    </div>
-    <div class="container" style="height: 7%;">
-        <div class="item" style="width: 9.6vw">
-            <p style="margin-top: 0.5vh; padding-right: 2vh;">Selected year: <output id="year" style="font-weight: bold;">2019</output></p>
-            <div class="range" style="width:78%;">
-                <input style="width:100%;" type="range" min="2007" max="2019" steps="1" value="2019" id="year_input"
-                    list="steplist">
-                <datalist id="steplist">
-                    <option value="2007" label="2007"></option>
-                    <option value="2008" label="2008"></option>
-                    <option value="2009" label="2009"></option>
-                    <option value="2010" label="2010"></option>
-                    <option value="2011" label="2011"></option>
-                    <option value="2012" label="2012"></option>
-                    <option value="2013" label="2013"></option>
-                    <option value="2014" label="2014"></option>
-                    <option value="2015" label="2015"></option>
-                    <option value="2016" label="2016"></option>
-                    <option value="2017" label="2017"></option>
-                    <option value="2018" label="2018"></option>
-                    <option value="2019" label="2019"></option>
-                </datalist>
+        <div class="container" style="height: 100%; width:50%; flex-flow:column">
+            <div class="item" style="height:7%;">
+                <p style="margin-top: 0.5vh; padding-right: 2vh;">Selected country: <output id="country"
+                        style="font-weight: bold;">EU</output></p>
+                <div>
+                    <button
+                        onclick="updateStackedBarChart({year: document.querySelector('#year_input').value})">Total</button>
+                </div>
             </div>
-            <!-- !!! This need to be fixed, it resets the year -->
-        </div>
-        <div class="item">
-            <p style="margin-top: 0.5vh; padding-right: 2vh;">Selected country: <output id="country" style="font-weight: bold;">EU</output></p>
-            <div>
-                <button onclick="updateStackedBarChart()">Total</button>
+            <div class="item" style="height: 93%; display:block;">
+                <p style="font-size:1.2em; font-weight: bold; margin-left:1.5vh">
+                    Water abstraction by economic sector
+                </p>
+                <div id="groupedBarChart"></div>
+                <div id="groupedBarLegend"></div>
             </div>
         </div>
     </div>

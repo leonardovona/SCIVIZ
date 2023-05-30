@@ -72,7 +72,6 @@ export function drawStackedBarChart() {
             .append("g")
 
         let mouseOver = function (d) {
-            console.log(d.srcElement.__data__[0])
             d3.selectAll(".legend-dot-stacked-bar")
                 .transition()
                 .duration(200)
@@ -156,7 +155,7 @@ export function drawStackedBarChart() {
             .on("mouseover", mouseOver)
             .on("mouseleave", mouseLeave)
             .on("click", function (d) {
-                updateStackedBarChart({ pollutant: d.srcElement.__data__ })
+                updateStackedBarChart({ pollutant: d.srcElement.__data__, year: document.querySelector("#year_input").value })
             })
 
         // console.log(stackedData)
