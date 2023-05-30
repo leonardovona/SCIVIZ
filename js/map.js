@@ -28,7 +28,7 @@ export function drawMap() {
 
     color = d3.scaleThreshold()
         .domain([0.01, 5, 10, 20, 40, 200])
-        .range(d3.schemeReds[6]);
+        .range(['#f8f1ff', '#d1e5f0', '#fddbc7', '#ef8a62', '#b2182b']) // reverse scheme RdBu
 
     // Map and projection
     path = d3.geoPath();
