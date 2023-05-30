@@ -53,12 +53,8 @@
         </div>
         <div class="container" style="height: 100%; width:50%; flex-flow:column">
             <div class="item" style="height:7%;">
-                <p style="margin-top: 0.5vh; padding-right: 2vh;">Selected country: <output id="country"
+                <p style="margin-top: 1vh; padding-right: 2vh; padding-left:1vh">Selected country: <output id="country"
                         style="font-weight: bold;">EU</output></p>
-                <div>
-                    <button
-                        onclick="updateStackedBarChart({year: document.querySelector('#year_input').value})">Total</button>
-                </div>
             </div>
             <div class="item" style="height: 93%; display:block;">
                 <p style="font-size:1.2em; font-weight: bold; margin-left:1.5vh">
@@ -78,11 +74,15 @@
     </div>
 
     <div class="container" style="height: 36%;">
-        <div class="item">
+        <div class="item" style="width: 50%;">
             <div id="stackedBarChart"></div>
             <div id="stackedBarLegend"></div>
+            <div>
+                <button
+                    onclick="updateStackedBarChart({year: document.querySelector('#year_input').value})">Reset order</button>
+            </div>
         </div>
-        <div class="item">
+        <div class="item" style="width: 50%;">
             <div id="lineChart"></div>
             <div id="lineLegend"></div>
         </div>
