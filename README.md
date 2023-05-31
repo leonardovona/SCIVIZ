@@ -7,4 +7,5 @@ https://leonardovona.github.io/SCIVIZ/
 TO DO:
 - Handle missing data in pollutants in water data set
 - Handle small countries, which are not clickable in the map
-- Handle different scales for pollutants
+- Handle different scales for pollutants -> normalize
+- Add tutorial

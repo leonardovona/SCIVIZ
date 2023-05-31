@@ -70,13 +70,13 @@ export function drawLineChart() {
             svg.append("g")
                 .attr("class", "y-axis");
 
-            svg.append("text")
-                .attr("class", "y label")
-                .attr("text-anchor", "end")
-                .attr("x", 0)
-                .attr("y", -5)
-                .attr("dy", "-.30em")
-                .text("kg");
+            // svg.append("text")
+            //     .attr("class", "y label")
+            //     .attr("text-anchor", "end")
+            //     .attr("x", 0)
+            //     .attr("y", -5)
+            //     .attr("dy", "-.30em")
+            //     .text("kg");
 
             const subgroups = ['Nitrogen', 'Phosphorus', 'TOC', 'Heavy metals (Cd, Hg, Ni, Pb)']
 
@@ -127,10 +127,10 @@ export function updateLineChart({ country = "EU" } = {}) {
 
     y_line.domain([0, d3.max(data, function (d) {
         return Math.max(
-            parseInt(d.Nitrogen),
-            parseInt(d.Phosphorus),
-            parseInt(d.TOC),
-            parseInt(d['Heavy metals (Cd, Hg, Ni, Pb)']))
+            parseFloat(d.Nitrogen),
+            parseFloat(d.Phosphorus),
+            parseFloat(d.TOC),
+            parseFloat(d['Heavy metals (Cd, Hg, Ni, Pb)']))
     })]);
 
     svg.selectAll(".y-axis").transition()
@@ -156,6 +156,7 @@ export function updateLineChart({ country = "EU" } = {}) {
         .transition()
         .duration(1000)
         .attr("d", d3.line()
+            .defined(function (d) { return d.Nitrogen != 0; })
             .x(function (d) { return x_line(d.reportingYear); })
             .y(function (d) { return y_line(d.Nitrogen); }))
         .attr("fill", "none")
@@ -168,6 +169,7 @@ export function updateLineChart({ country = "EU" } = {}) {
         .transition()
         .duration(1000)
         .attr("d", d3.line()
+            .defined(function (d) { return d.Phosphorus != 0; })
             .x(function (d) { return x_line(d.reportingYear); })
             .y(function (d) { return y_line(d.Phosphorus); }))
         .attr("fill", "none")
@@ -180,6 +182,7 @@ export function updateLineChart({ country = "EU" } = {}) {
         .transition()
         .duration(1000)
         .attr("d", d3.line()
+            .defined(function (d) { return d.TOC != 0; })
             .x(function (d) { return x_line(d.reportingYear); })
             .y(function (d) { return y_line(d.TOC); }))
         .attr("fill", "none")
@@ -190,8 +193,9 @@ export function updateLineChart({ country = "EU" } = {}) {
         .join("path")
         .attr("class", "line_h")
         .transition()
-        .duration(3000)
+        .duration(1000)
         .attr("d", d3.line()
+            .defined(function (d) { return d['Heavy metals (Cd, Hg, Ni, Pb)'] != 0; })
             .x(function (d) { return x_line(d.reportingYear); })
             .y(function (d) { return y_line(d['Heavy metals (Cd, Hg, Ni, Pb)']); }))
         .attr("fill", "none")

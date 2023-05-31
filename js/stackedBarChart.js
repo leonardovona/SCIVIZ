@@ -25,19 +25,19 @@ export function drawStackedBarChart() {
         .attr("transform", "translate(0," + height + ")")
 
     y = d3.scaleLinear()
-        .domain([0, 190000000])
+        .domain([0, 0.8])
         .range([height, 0]);
 
     svg.append("g")
         .call(d3.axisLeft(y));
 
-    svg.append("text")
-        .attr("class", "y label")
-        .attr("text-anchor", "end")
-        .attr("x", 0)
-        .attr("y", -10)
-        .attr("dy", ".15em")
-        .text("kg");
+    // svg.append("text")
+    //     .attr("class", "y label")
+    //     .attr("text-anchor", "end")
+    //     .attr("x", 0)
+    //     .attr("y", -10)
+    //     .attr("dy", ".15em")
+    //     .text("kg");
 
     bars = svg.append("g").attr("class", "bars");
 
