@@ -28,7 +28,7 @@ export function drawMap() {
 
     color = d3.scaleThreshold()
         .domain([0.01, 5, 10, 20, 40, 200])
-        .range(['#f8f1ff',"#fcae91","#fb6a4a","#de2d26","#a50f15"])
+        .range(['#EBEDEF',"#fcae91","#fb6a4a","#de2d26","#a50f15"])
         // .range(d3.schemeReds[5]);
         // .range(['#f8f1ff', '#d1e5f0', '#fddbc7', '#ef8a62', '#b2182b']) // reverse scheme RdBu
 

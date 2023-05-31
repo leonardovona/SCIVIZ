@@ -2,7 +2,7 @@
 var x_axis, y, subgroups, groups, pollutants_data, bars, color;
 
 // set the dimensions and margins of the graph
-const margin = { top: 30, right: 0, bottom: 40, left: 80 },
+const margin = { top: 30, right: 0, bottom: 40, left: 45 },
     height = 320 - margin.top - margin.bottom;
 
 const stackedBarChartContainer = d3.select("#stackedBarChart")

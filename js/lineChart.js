@@ -1,5 +1,5 @@
 // set the dimensions and margins of the graph
-const margin = { top: 15, right: 40, bottom: 35, left: 40 },
+const margin = { top: 15, right: 40, bottom: 35, left: 25 },
     height = 300 - margin.top - margin.bottom;
 
 const lineChartContainer = d3.select("#lineChart")
