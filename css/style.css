@@ -31,6 +31,7 @@ body {
 
 #mapItem {
   height: 100%;
+  display: block;
 }
 
 .thin {
@@ -79,6 +80,11 @@ output {
 #rangeDiv {
   width: 96%;
   height: 12%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 1vw;
+  padding-right: 1vw;
 }
 
 range {
@@ -182,4 +188,21 @@ button {
 button:hover {
   background-color: #006CBA;
   cursor: pointer;
+}
+
+#header {
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 1.2vw;
+  padding-right: 1.2vw;
+}
+
+#countryP {
+  font-size:1.1vw;
+}
+
+#groupedBarDiv {
+  display: flex;
+  width: 100%;
+  height: 80%;
 }

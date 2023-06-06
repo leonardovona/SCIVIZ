@@ -1,0 +1,39 @@
+body {
+    overflow: auto;
+    text-align: justify;
+    font-size: 1vw;
+}
+
+img {
+    width: 20vw;
+}
+
+.paragraph {
+    padding-left:1.5vw;
+}
+
+#container {
+    width:70vw;
+    display:block;
+    margin: auto;
+}
+
+#item {
+    display: block;
+    padding: 2vw;
+    margin: 2vw;
+}
+
+#header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.block {
+    display: block;
+}
+
+.flex {
+    display: flex;
+}

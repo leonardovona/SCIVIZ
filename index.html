@@ -23,9 +23,9 @@
 <body>
     <div class="container" id="firstRowContainer">
         <div class="container column-container">
-            <div class="item" id="mapItem" style="display:block;">
+            <div class="item" id="mapItem">
                 <div id="map"></div>   
-                <div class="range" id="rangeDiv" style="display:flex; align-items: center; justify-content: space-between; padding-left: 1vw; padding-right: 1vw;">
+                <div class="range" id="rangeDiv">
                     <p class="outputP"> Selected year: <output id="year">2019</output> </p>
                     <input type="range" min="2007" max="2019" steps="1" value="2019" id="year_input" list="steplist">
                     <datalist id="steplist">
@@ -47,13 +47,13 @@
             </div>
         </div>
         <div class="container column-container">
-            <div class="item thin" style="align-items: center; justify-content: space-between; padding-left:1.2vw; padding-right: 1.2vw;">
-                <p class="outputP" style="font-size:1.1vw">Selected country: <output id="country">EU</output></p>
+            <div class="item thin" id="header">
+                <p class="outputP" id="countryP">Selected country: <output id="country">EU</output></p>
                 <button onclick="location.href='./guide'">Guide</button>
             </div>
-            <div class="item" id="groupedBarItem" style="display:block;">
+            <div class="item" id="groupedBarItem">
                 <p id="groupedBarTitle">Water abstraction by economic sector</p>
-                <div style="display:flex; width:100%; height:80%;">
+                <div id="groupedBarDiv">
                     <div id="groupedBarChart"></div>
                     <div id="groupedBarLegend"></div>
                 </div>
