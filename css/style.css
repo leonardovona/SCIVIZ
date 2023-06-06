@@ -30,7 +30,7 @@ body {
 }
 
 #mapItem {
-  height: 93%;
+  height: 100%;
 }
 
 .thin {
@@ -54,22 +54,17 @@ body {
   width: 50%;
 }
 
-.outputP {
-  margin-top: 0.8vh;
-  margin-right: 1.5vw;
-  padding-left: 0.5vw;
-}
-
 #groupedBarTitle {
-  font-size: 1.2em;
+  font-size: 1vw;
   font-weight: bold;
   margin-left: 1.5vh;
+  height: 8%
 }
 
 #secondRowP {
   text-align: center;
-  font-size: 1.5em;
-  margin-top: 0;
+  font-size: 1.2vw;
+  margin-top: 0.1vh;
   font-weight: bold;
 }
 
@@ -77,13 +72,21 @@ output {
   font-weight: bold;
 }
 
+.outputP {
+  font-size: 0.9vw
+}
+
 #rangeDiv {
-  width: 78%;
-  margin-top: 0.3vh
+  width: 96%;
+  height: 12%;
+}
+
+range {
+  width: 100%;
 }
 
 #year_input {
-  width: 100%
+  width: 80%;
 }
 
 .item {
@@ -98,21 +101,22 @@ output {
 
 #map {
   width: 100%;
-  height: 100%;
+  height: 88%;
 }
 
 #groupedBarChart {
   display: inline-block;
   position: relative;
   width: 69%;
-  height: 70%;
+  height: 100%;
 }
 
 #groupedBarLegend {
   display: inline-block;
   position: relative;
   vertical-align: top;
-  width: 30%;
+  width: 28%;
+  height: 100%;
 }
 
 #stackedBarChart {
@@ -148,7 +152,7 @@ output {
 div.tooltip {
   position: absolute;
   padding: 8px;
-  font-size: 0.8em;
+  font-size: 0.8vw;
   pointer-events: none;
   background: #fff;
   border: 1px solid #ccc;
@@ -167,11 +171,11 @@ button {
   background-color: #008CBA;
   border: none;
   color: white;
-  padding: 7px 12px;
+  padding: 0.4vw 0.5vw;
   text-align: center;
   text-decoration: none;
   display: inline-block;
-  font-size: 12px;
+  font-size: 0.72vw;
   border-radius: 5px;
 }
 

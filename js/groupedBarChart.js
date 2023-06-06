@@ -1,5 +1,5 @@
 // set the dimensions and margins of the graph
-const margin = { top: 10, right: 50, bottom: 60, left: 42.5 },
+const margin = { top: 10, right: 0, bottom: 30, left: 42.5 },
     width = 600 - margin.left - margin.right,
     height = 370 - margin.top - margin.bottom;
 
@@ -14,6 +14,8 @@ export function drawGroupedBarChart() {
             `-${margin.left} -${margin.top} ${width + margin.left + margin.right} ${height + margin.top + margin.bottom}`
         )
         .attr("preserveAspectRatio", "xMinYMin meet")
+        .attr("height", "100%")
+        .attr("width", "100%")
         .classed("svg-content", true)
         .append("g")
         .attr("transform", `translate(${margin.left},${margin.top})`);

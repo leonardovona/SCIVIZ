@@ -1,5 +1,5 @@
 // set the dimensions and margins of the graph
-const margin = { top: 15, right: 40, bottom: 35, left: 25 },
+const margin = { top: 15, right: 40, bottom: 55, left: 25 },
     height = 300 - margin.top - margin.bottom;
 
 const lineChartContainer = d3.select("#lineChart")
@@ -18,6 +18,8 @@ export function drawLineChart() {
             `-${margin.left} -${margin.top} ${width + margin.left + margin.right} ${height + margin.top + margin.bottom}`
         )
         .attr("preserveAspectRatio", "xMinYMin meet")
+        .attr("height", "100%")
+        .attr("width", "100%")
         .classed("svg-content", true)
         .append("g")
         .attr("transform", `translate(${margin.left},${margin.top})`);

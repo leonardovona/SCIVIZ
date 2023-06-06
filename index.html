@@ -23,12 +23,10 @@
 <body>
     <div class="container" id="firstRowContainer">
         <div class="container column-container">
-            <div class="item" id="mapItem">
-                <div id="map"></div>
-            </div>
-            <div class="item thin">
-                <p class="outputP"> Selected year: <output id="year">2019</output> </p>
-                <div class="range" id="rangeDiv">
+            <div class="item" id="mapItem" style="display:block;">
+                <div id="map"></div>   
+                <div class="range" id="rangeDiv" style="display:flex; align-items: center; justify-content: space-between; padding-left: 1vw; padding-right: 1vw;">
+                    <p class="outputP"> Selected year: <output id="year">2019</output> </p>
                     <input type="range" min="2007" max="2019" steps="1" value="2019" id="year_input" list="steplist">
                     <datalist id="steplist">
                         <option value="2007" label="2007"></option>
@@ -49,13 +47,16 @@
             </div>
         </div>
         <div class="container column-container">
-            <div class="item thin">
-                <p class="outputP" style="font-size:1.3em">Selected country: <output id="country">EU</output></p>
+            <div class="item thin" style="align-items: center; justify-content: space-between; padding-left:1.2vw; padding-right: 1.2vw;">
+                <p class="outputP" style="font-size:1.1vw">Selected country: <output id="country">EU</output></p>
+                <button onclick="location.href='./guide'">Guide</button>
             </div>
-            <div class="item" id="groupedBarItem">
+            <div class="item" id="groupedBarItem" style="display:block;">
                 <p id="groupedBarTitle">Water abstraction by economic sector</p>
-                <div id="groupedBarChart"></div>
-                <div id="groupedBarLegend"></div>
+                <div style="display:flex; width:100%; height:80%;">
+                    <div id="groupedBarChart"></div>
+                    <div id="groupedBarLegend"></div>
+                </div>
             </div>
         </div>
     </div>

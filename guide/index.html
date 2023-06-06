@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<head>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body style="overflow: auto; text-align: justify; font-size: 1vw;">
+    <div class="container" style="width:70vw; display:block; margin: auto">
+        <div class="item" style="display:block; padding:2vw; margin:2vw;">
+            <div style="width: 100%; display:flex; justify-content: space-between;">
+                <h2>Quick guide</h2>
+                <div style="display:block">
+                    <button onclick="location.href='/'">Back</button>
+                </div>
+
+            </div>
+
+            This website visualizes some insights about water utilization and pollution in EU countries from 2007 to 2019.
+            <br/><br/>
+            <h3>Water scarcity conditions</h3>
+            <div style="display:flex;">
+                <img src="./img/map.png" alt="Map" style="width:20vw;">
+                <div style="padding-left:1.5vw">
+                    The water scarcity condition of a country can be estimated by means of the Water Exploitation Index plus (WEI+). 
+                    The WEI+, for a given territory and a given temporal interval, is calculated as the ratio between water consumption and the renewable freshwater resources.
+                    <br/>
+                    WEI+ values above 20% indicate that water resources are under stress; values above 40% indicate that stress is severe and freshwater resources are overexploited.
+                    <br/><br/>
+                    The choropleth map shows the WEI+ per country for the selected year. The year can be selected using the slider below the map, and is shown on the left of the slider.
+                    <br/><br/>
+                    By moving the mouse over a EU member state, the WEI+ value for that nation is displayed.
+                </div>
+            </div>
+            <br/><br/>
+            <h3>Water abstraction by economic sector</h3>
+            <div style="display:flex;">
+                <img src="./img/groupedBarChart.png" alt="Grouped Bar Chart" style="width:20vw;">
+                <div style="padding-left:1.5vw">
+                    The grouped bar chart shows the water abstraction per economic sector for the selected country.
+                    By default, the entire EU data is visualized. 
+                    <br/><br/>
+                    It is possible to change the country for which the water abstraction data is shown by clicking on it in the map.
+                    To deselect a state and show the EU data again, it is sufficient to click on the selected country another time.
+                    When a nation is selected, its name will be visible above the grouped bar chart and the map will highlight the selected country.
+                </div>
+            </div>
+            <br/><br/>
+            <h3>Industrial pollutant releases to water</h3>
+            Industrial activity causes the release of pollutants to water. In particular, this visualization focuses on two categories of pollutants:
+            <ul>
+                <li>Nutrients that favor eutrophication: total organic carbon (TOC), nitrogen and phosphorous</li>
+                <li>Heavy metals: Cadmium (Cd), Lead (Pb), Mercury (Hg) and Nickel (Ni)</li>
+            </ul>
+            The data (which is normalized to reduce the effects of different scale factors) is visualized in two ways: a stacked bar chart and a line chart.
+            <br/><br/><br/>
+            <div style="display:flex;">
+                <img src="./img/stackedBarChart.png" alt="Stacked Bar Chart" style="width:20vw;">
+                <div style="padding-left:1.5vw">
+                    The stacked bar chart reports, for the selected year, the amount of pollutant released by each country. Also in this case, the year is controlled by the slider below the map.
+                    By default, the values are sorted by the total amount of pollutant, but it is possible to sort them by a specific pollutant by clicking on the corresponding label in the legend.
+                    To reset the default sorting, it is enough to click on the "Reset order" button.
+                </div>
+            </div>
+            <br/><br/>
+            <div style="display:flex;">
+                <img src="./img/lineChart.png" alt="Line Chart" style="width:20vw;">
+                <div style="padding-left:1.5vw">
+                    The line chart shows the trends of the amount of pollutants released by the selected country.
+                    The nation for which the data is visualized can be selected by clicking on it in the map.
+                </div>
+            </div>
+            <br/><br/>
+            <h2>Data sources</h2>
+            <ul>
+                <li>Water scarcity conditions: <a href="https://ec.europa.eu/eurostat/databrowser/view/sdg_06_60/default/table?lang=en">Eurostat</a></li>
+                <li>Water abstraction by economic sector: <a href="https://www.eea.europa.eu/data-and-maps/daviz/water-abstraction-by-economic-sector-1#tab-chart_6_filters=%7B%22rowFilters%22%3A%7B%7D%3B%22columnFilters%22%3A%7B%22pre_config_country%22%3A%5B%22Austria%22%5D%7D%7D">European Environment Agency</a></li>
+                <li>Industrial pollutant releases to water: <a href="https://sdi.eea.europa.eu/catalogue/srv/eng/catalog.search#/metadata/0e2e16ac-06e9-40b8-9aef-b3d228100564">European Environment Agency</a></li>
+            </ul>
+
+        </div>
+    </div>
+</body>

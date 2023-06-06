@@ -17,6 +17,8 @@ export function drawStackedBarChart() {
             `-${margin.left} -${margin.top} ${width + margin.left + margin.right} ${height + margin.top + margin.bottom}`
         )
         .attr("preserveAspectRatio", "xMinYMin meet")
+        .attr("height", "100%")
+        .attr("width", "100%")
         .classed("svg-content", true)
         .append("g")
 

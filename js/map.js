@@ -17,6 +17,8 @@ export function drawMap() {
             `-${margin.left} -${margin.top} ${width + margin.left + margin.right} ${height + margin.top + margin.bottom}`
         )
         .attr("preserveAspectRatio", "xMinYMin meet")
+        .attr("height", "88%")
+        .attr("width", "100%")
         .classed("svg-content", true)
 
     svg.append("text")
