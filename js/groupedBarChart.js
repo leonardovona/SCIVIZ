@@ -86,6 +86,8 @@ export function drawGroupedBarChart() {
                 "viewBox",
                 `-20 -20 350 350`
             )
+            .attr("height", "100%")
+            .attr("width", "100%")
             .attr("preserveAspectRatio", "xMinYMin meet")
             .classed("svg-content", true)
             .append("g")

@@ -24,9 +24,10 @@ img {
     margin: 2vw;
 }
 
-#header {
+#guideHeader {
     width: 100%;
     display: flex;
+    align-items: center;
     justify-content: space-between;
 }
 

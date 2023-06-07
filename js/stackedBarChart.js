@@ -60,6 +60,8 @@ export function drawStackedBarChart() {
                 "viewBox",
                 `-20 -20 290 290`
             )
+            .attr("height", "100%")
+            .attr("width", "100%")
             .attr("preserveAspectRatio", "xMinYMin meet")
             .classed("svg-content", true)
             .append("g")

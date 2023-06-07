@@ -59,7 +59,9 @@ body {
   font-size: 1vw;
   font-weight: bold;
   margin-left: 1.5vh;
-  height: 8%
+  height: 8%;
+  margin-top: 1vh;
+  margin-bottom: 3vh;
 }
 
 #secondRowP {
