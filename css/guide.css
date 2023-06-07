@@ -1,3 +1,10 @@
+/* 
+Leonardo Vona
+SCIVIZ Project 22/23
+
+Styling for the guide page
+*/
+
 body {
     overflow: auto;
     text-align: justify;
@@ -9,12 +16,12 @@ img {
 }
 
 .paragraph {
-    padding-left:1.5vw;
+    padding-left: 1.5vw;
 }
 
 #container {
-    width:70vw;
-    display:block;
+    width: 70vw;
+    display: block;
     margin: auto;
 }
 
