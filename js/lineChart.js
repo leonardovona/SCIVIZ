@@ -10,7 +10,7 @@ const margin = { top: 15, right: 40, bottom: 55, left: 25 },
     height = 300 - margin.top - margin.bottom;
 
 const lineChartContainer = d3.select("#lineChart"); // get the container div
-const width = lineChartContainer.node().getBoundingClientRect().width - margin.left - margin.right;
+const width = 600 - margin.left - margin.right;
 
 var line_data, // data to be visualized
     x_line, // x axis values

@@ -10,7 +10,7 @@ const margin = { top: 30, right: 0, bottom: 40, left: 45 },
     height = 320 - margin.top - margin.bottom;
 
 const stackedBarChartContainer = d3.select("#stackedBarChart") // select the div container
-const width = stackedBarChartContainer.node().getBoundingClientRect().width - margin.left - margin.right
+const width = 600 - margin.left - margin.right
 
 var x_axis, // x axis object
     y, // y axis values
